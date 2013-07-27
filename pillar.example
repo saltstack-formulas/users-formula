@@ -1,0 +1,8 @@
+users:
+  auser:
+    sudouser: True
+    shell: /bin/zsh
+    groups:
+      - admin
+    ssh_auth:
+      - ssh-rsa PUBLICKEYKEYKEY
