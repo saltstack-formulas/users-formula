@@ -6,3 +6,7 @@ users:
       - admin
     ssh_auth:
       - ssh-rsa PUBLICKEYKEYKEY
+
+absent_users:
+  - donald
+  - bad_guy
