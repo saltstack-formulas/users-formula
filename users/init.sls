@@ -39,12 +39,12 @@ include:
     - groups:
         - {{ name }}
       {% for group in user.get('groups', []) %}
-        - {{ group }}_group
+        - {{ group }}
       {% endfor %}
     - require:
-        - group: {{ name }}_user
+        - group: {{ name }}
       {% for group in user.get('groups', []) %}
-        - group: {{ group }}_group
+        - group: {{ group }}
       {% endfor %}
 
 user_keydir_{{ name }}:
