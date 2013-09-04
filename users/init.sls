@@ -28,7 +28,7 @@ include:
   user.present:
     - name: {{ name }}
     - home: {{ home }}
-    - shell: {{ pillar.get('shell', '/bin/bash') }}
+    - shell: {{ user.get('shell', '/bin/bash') }}
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
     {% endif %}
