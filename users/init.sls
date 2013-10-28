@@ -25,6 +25,7 @@ include:
       - group: {{ name }}
   group.present:
     - name: {{ name }}
+    - gid: {{ user['uid'] }}
   user.present:
     - name: {{ name }}
     - home: {{ home }}
@@ -101,15 +102,25 @@ ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
-{% if 'sudouser' in user %}
-sudoer-{{ name }}:
-    file.append:
-        - name: /etc/sudoers
-        - text:
-          - "{{ name }}    ALL=(ALL)  NOPASSWD: ALL"
-        - require:
-          - file: sudoer-defaults
 
+{% if 'sudouser' in user and user['sudouser'] %}
+sudoer-{{ name }}:
+  file.managed:
+    - name: /etc/sudoers.d/{{ name }}
+    - user: root
+    - group: root
+    - mode: '0440'
+/etc/sudoers.d/{{ name }}:
+  file.append:
+  - text:
+    - "{{ name }}    ALL=(ALL)  NOPASSWD: ALL"
+  - require:
+    - file: sudoer-defaults
+    - file: sudoer-{{ name }}
+{% else %}
+/etc/sudoers.d/{{ name }}:
+  file.absent:
+    - name: /etc/sudoers.d/{{ name }}
 {% endif %}
 
 {% endfor %}
@@ -117,4 +128,7 @@ sudoer-{{ name }}:
 {% for user in pillar.get('absent_users', []) %}
 {{ user }}:
   user.absent
+/etc/sudoers.d/{{ user }}:
+  file.absent:
+    - name: /etc/sudoers.d/{{ user }}
 {% endfor %}
