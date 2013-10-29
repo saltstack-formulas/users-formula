@@ -125,7 +125,11 @@ sudoer-{{ name }}:
 
 {% endfor %}
 
-{% for user in pillar.get('absent_users', []) %}
+{% set users =  pillar.get('absent_users', []) %}
+{% if users == None %}
+{% set users = [] %}
+{% endif %}
+{% for user in users %}
 {{ user }}:
   user.absent
 /etc/sudoers.d/{{ user }}:
