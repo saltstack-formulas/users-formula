@@ -25,7 +25,9 @@ include:
       - group: {{ name }}
   group.present:
     - name: {{ name }}
+    {% if 'uid' in user -%}
     - gid: {{ user['uid'] }}
+    {% endif %}
   user.present:
     - name: {{ name }}
     - home: {{ home }}
