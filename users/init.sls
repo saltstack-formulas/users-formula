@@ -14,7 +14,7 @@ include:
 {%- endif %}
 
 {% for group in user.get('groups', []) %}
-{{ group }}_group:
+{{ name }}_{{ group }}_group:
   group:
     - name: {{ group }}
     - present
@@ -87,7 +87,7 @@ user_{{ name }}_private_key:
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
-      - group: {{ group }}_group
+      - group: {{ name }}_{{ group }}_group
       {% endfor %}
 user_{{ name }}_public_key:
   file.managed:
@@ -99,7 +99,7 @@ user_{{ name }}_public_key:
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
-      - group: {{ group }}_group
+      - group: {{ name }}_{{ group }}_group
       {% endfor %}
   {% endif %}
 
