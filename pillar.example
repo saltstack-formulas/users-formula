@@ -13,13 +13,13 @@ users:
       - buser ALL=(otheruser) /usr/bin/script.sh
     shell: /bin/bash
     prime_group:
-      - name: primarygroup
-      - gid: 500
+      name: primarygroup
+      gid: 500
     groups:
       - users
     ssh_keys:
-      - privkey: PRIVATEKEY
-      - pubkey: PUBLICKEY
+      privkey: PRIVATEKEY
+      pubkey: PUBLICKEY
     ssh_auth:
       - ssh-rsa: PUBLICKEYKEYKEY
 
