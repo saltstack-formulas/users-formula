@@ -76,14 +76,14 @@ user_keydir_{{ name }}:
       - group: {{ group }}
       {%- endfor %}
 
-  {% if 'privkey' in user %}
+  {% if 'ssh_keys' in user %}
 user_{{ name }}_private_key:
   file.managed:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/id_rsa
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
-    - source: salt://keys/{{ user['privkey'] }}
+    - contents: {{ user['ssh_keys']['privkey'] }} 
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
@@ -93,9 +93,9 @@ user_{{ name }}_public_key:
   file.managed:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/id_rsa.pub
     - user: {{ name }}
-    - group: {{ name }}
+    - group: {{ user_group }}
     - mode: 644
-    - source: salt://keys/{{ user['privkey'] }}.pub
+    - contents: {{ user['ssh_keys']['pubkey'] }} 
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
@@ -127,7 +127,9 @@ sudoer-{{ name }}:
 /etc/sudoers.d/{{ name }}:
   file.append:
   - text:
-    - "{{ name }}    ALL=(ALL)  NOPASSWD: ALL"
+    {% for rule in user.get('sudo_rules', []) %}
+    - {{ rule }}
+    {% endfor %}
   - require:
     - file: sudoer-defaults
     - file: sudoer-{{ name }}

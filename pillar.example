@@ -1,11 +1,27 @@
 users:
+## Minimal required pillar values
   auser:
-    sudouser: True
-    shell: /bin/zsh
     groups:
       - admin
+
+## Full list of pillar values
+  buser:
+    fullname: B User
+    sudouser: True
+    sudo_rules: 
+      - buser ALL=(root) /usr/bin/find
+      - buser ALL=(otheruser) /usr/bin/script.sh
+    shell: /bin/bash
+    prime_group:
+      name: primarygroup
+      gid: 500
+    groups:
+      - users
+    ssh_keys:
+      privkey: PRIVATEKEY
+      pubkey: PUBLICKEY
     ssh_auth:
-      - ssh-rsa PUBLICKEYKEYKEY
+      - ssh-rsa: PUBLICKEYKEYKEY
 
 absent_users:
   - donald
