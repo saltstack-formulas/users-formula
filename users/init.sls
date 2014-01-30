@@ -93,7 +93,7 @@ user_{{ name }}_public_key:
   file.managed:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/id_rsa.pub
     - user: {{ name }}
-    - group: {{ name }}
+    - group: {{ user_group }}
     - mode: 644
     - contents: {{ user['ssh_keys']['pubkey'] }} 
     - require:
