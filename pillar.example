@@ -17,6 +17,7 @@ users:
       gid: 500
     groups:
       - users
+    ssh_key_type: rsa
     ssh_keys:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY

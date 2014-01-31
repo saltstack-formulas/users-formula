@@ -77,9 +77,10 @@ user_keydir_{{ name }}:
       {%- endfor %}
 
   {% if 'ssh_keys' in user %}
+  {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
 user_{{ name }}_private_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/id_rsa
+    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
@@ -91,7 +92,7 @@ user_{{ name }}_private_key:
       {% endfor %}
 user_{{ name }}_public_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/id_rsa.pub
+    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}.pub
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
