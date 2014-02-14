@@ -68,7 +68,7 @@ user_keydir_{{ name }}:
     - user: {{ name }}
     - group: {{ user_group }}
     - makedirs: True
-    - mode: 744
+    - mode: 700
     - require:
       - user: {{ name }}
       - group: {{ user_group }}
