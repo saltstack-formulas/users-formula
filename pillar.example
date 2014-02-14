@@ -22,7 +22,7 @@ users:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY
     ssh_auth:
-      - ssh-rsa: PUBLICKEYKEYKEY
+      - PUBLICKEY
 
 absent_users:
   - donald
