@@ -84,7 +84,7 @@ user_{{ name }}_private_key:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
-    - contents: {{ user['ssh_keys']['privkey'] }} 
+    - contents_pillar: users:{{ name }}:ssh_keys:privkey
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
@@ -96,7 +96,7 @@ user_{{ name }}_public_key:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
-    - contents: {{ user['ssh_keys']['pubkey'] }} 
+    - contents_pillar: users:{{ name }}:ssh_keys:privkey
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
