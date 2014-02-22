@@ -125,15 +125,17 @@ sudoer-{{ name }}:
     - user: root
     - group: root
     - mode: '0440'
+{% if 'sudo_rules' in user %}
 /etc/sudoers.d/{{ name }}:
   file.append:
-  - text:
-    {% for rule in user.get('sudo_rules', []) %}
-    - {{ rule }}
-    {% endfor %}
-  - require:
-    - file: sudoer-defaults
-    - file: sudoer-{{ name }}
+    - text:
+      {% for rule in user['sudo_rules'] %}
+      - "{{ name }} {{ rule }}"
+      {% endfor %}
+    - require:
+      - file: sudoer-defaults
+      - file: sudoer-{{ name }}
+{% endif %}
 {% else %}
 /etc/sudoers.d/{{ name }}:
   file.absent:
