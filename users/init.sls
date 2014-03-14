@@ -151,3 +151,9 @@ sudoer-{{ name }}:
   file.absent:
     - name: /etc/sudoers.d/{{ user }}
 {% endfor %}
+
+{% for group in pillar.get('absent_groups', []) %}
+{{ group }}:
+  group.absent
+{% endfor %}
+
