@@ -96,7 +96,7 @@ user_{{ name }}_public_key:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
-    - contents_pillar: users:{{ name }}:ssh_keys:privkey
+    - contents_pillar: users:{{ name }}:ssh_keys:pubkey
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
