@@ -10,8 +10,8 @@ users:
     home: /custom/buser
     sudouser: True
     sudo_rules: 
-      - buser ALL=(root) /usr/bin/find
-      - buser ALL=(otheruser) /usr/bin/script.sh
+      - ALL=(root) /usr/bin/find
+      - ALL=(otheruser) /usr/bin/script.sh
     shell: /bin/bash
     prime_group:
       name: primarygroup
