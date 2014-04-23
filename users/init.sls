@@ -1,7 +1,7 @@
 include:
   - users.sudo
 
-{% for name, user in pillar.get('users', {}).items() %}
+{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -105,8 +105,8 @@ user_{{ name }}_public_key:
   {% endif %}
 
 
-  {% if 'ssh_auth' in user %}
-  {% for auth in user['ssh_auth'] %}
+{% if 'ssh_auth' in user %}
+{% for auth in user['ssh_auth'] %}
 ssh_auth_{{ name }}_{{ loop.index0 }}:
   ssh_auth.present:
     - user: {{ name }}
@@ -142,6 +142,24 @@ sudoer-{{ name }}:
     - name: /etc/sudoers.d/{{ name }}
 {% endif %}
 
+{% endfor %}
+
+{% for name, user in pillar.get('users', {}).items() if user.absent is defined and user.absent %}
+{{ name }}:
+{% if 'purge' in user or 'force' in user %}
+  user.absent:
+    {% if 'purge' in user %}
+    - purge: {{ user['purge'] }}
+    {% endif %}
+    {% if 'force' in user %}
+    - force: {{ user['force'] }}
+    {% endif %}
+{% else %}
+  user.absent
+{% endif -%}
+/etc/sudoers.d/{{ name }}:
+  file.absent:
+    - name: /etc/sudoers.d/{{ name }}
 {% endfor %}
 
 {% for user in pillar.get('absent_users', []) %}
