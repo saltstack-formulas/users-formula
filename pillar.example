@@ -6,6 +6,7 @@ users:
   ## Full list of pillar values
   buser:
     fullname: B User
+    password: $6$w.............
     home: /custom/buser
     sudouser: True
     sudo_rules: 
