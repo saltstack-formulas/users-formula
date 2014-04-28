@@ -129,6 +129,17 @@ sudoer-{{ name }}:
     - group: root
     - mode: '0440'
 {% if 'sudo_rules' in user %}
+{% for rule in user['sudo_rules'] %}
+"validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
+  cmd.run:
+    - name: 'visudo -cf - <<<"$rule"'
+    - env:
+      # Specify the rule via an env var to avoid shell quoting issues.
+      - rule: "{{ name }} {{ rule }}"
+    - require_in:
+      - file: /etc/sudoers.d/{{ name }}
+{% endfor %}
+
 /etc/sudoers.d/{{ name }}:
   file.append:
     - text:
