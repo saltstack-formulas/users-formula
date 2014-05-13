@@ -87,6 +87,7 @@ user_{{ name }}_private_key:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
+    - show_diff: False
     - contents_pillar: users:{{ name }}:ssh_keys:privkey
     - require:
       - user: {{ name }}_user
@@ -99,6 +100,7 @@ user_{{ name }}_public_key:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
+    - show_diff: False
     - contents_pillar: users:{{ name }}:ssh_keys:pubkey
     - require:
       - user: {{ name }}_user
