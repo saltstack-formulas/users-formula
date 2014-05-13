@@ -143,11 +143,11 @@ sudoer-{{ name }}:
 {% endfor %}
 
 /etc/sudoers.d/{{ name }}:
-  file.append:
-    - text:
-      {% for rule in user['sudo_rules'] %}
-      - "{{ name }} {{ rule }}"
-      {% endfor %}
+  file.managed:
+    - contents: |
+      {%- for rule in user['sudo_rules'] %}
+        {{ name }} {{ rule }}
+      {%- endfor %}
     - require:
       - file: sudoer-defaults
       - file: sudoer-{{ name }}
