@@ -135,6 +135,7 @@ sudoer-{{ name }}:
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
   cmd.run:
     - name: 'visudo -cf - <<<"$rule"'
+    - shell: /bin/bash
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
