@@ -1,3 +1,6 @@
+# vim: sts=2 ts=2 sw=2 et ai
+{% from "users/map.jinja" import users with context %}
+
 include:
   - users.sudo
 
@@ -126,24 +129,24 @@ ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% if 'sudouser' in user and user['sudouser'] %}
 sudoer-{{ name }}:
   file.managed:
-    - name: /etc/sudoers.d/{{ name }}
+    - name: {{ users.sudoers_dir }}{{ name }}
     - user: root
-    - group: root
+    - group: {{ users.root_group }} 
     - mode: '0440'
 {% if 'sudo_rules' in user %}
 {% for rule in user['sudo_rules'] %}
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
   cmd.run:
     - name: 'visudo -cf - <<<"$rule"'
-    - shell: /bin/bash
+    - shell: {{ users.visudo_shell }} 
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
     - require_in:
-      - file: /etc/sudoers.d/{{ name }}
+      - file: {{ users.sudoers_dir }}{{ name }}
 {% endfor %}
 
-/etc/sudoers.d/{{ name }}:
+{{ users.sudoers_dir }}{{ name }}:
   file.managed:
     - contents: |
       {%- for rule in user['sudo_rules'] %}
@@ -154,9 +157,9 @@ sudoer-{{ name }}:
       - file: sudoer-{{ name }}
 {% endif %}
 {% else %}
-/etc/sudoers.d/{{ name }}:
+{{ users.sudoers_dir }}{{ name }}:
   file.absent:
-    - name: /etc/sudoers.d/{{ name }}
+    - name: {{ users.sudoers_dir }}{{ name }}
 {% endif %}
 
 {% endfor %}
@@ -174,17 +177,17 @@ sudoer-{{ name }}:
 {% else %}
   user.absent
 {% endif -%}
-/etc/sudoers.d/{{ name }}:
+{{ users.sudoers_dir }}{{ name }}:
   file.absent:
-    - name: /etc/sudoers.d/{{ name }}
+    - name: {{ users.sudoers_dir }}{{ name }}
 {% endfor %}
 
 {% for user in pillar.get('absent_users', []) %}
 {{ user }}:
   user.absent
-/etc/sudoers.d/{{ user }}:
+{{ users.sudoers_dir }}{{ user }}:
   file.absent:
-    - name: /etc/sudoers.d/{{ user }}
+    - name: {{ users.sudoers_dir }}{{ user }}
 {% endfor %}
 
 {% for group in pillar.get('absent_groups', []) %}
