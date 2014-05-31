@@ -5,17 +5,23 @@
     'sudoers_file': '/etc/sudoers',
     'root_group': 'root',
     'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
   },
   'FreeBSD': {
     'sudoers_dir': '/usr/local/etc/sudoers.d/',
     'sudoers_file': '/usr/local/etc/sudoers',
     'root_group': 'wheel',
     'visudo_shell': '/usr/local/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
   },
   'default': {
     'sudoers_dir': '/etc/sudoers.d/',
     'sudoers_file': '/etc/sudoers',
     'root_group': 'root',
     'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
   },
 }, merge=salt['pillar.get']('users:lookup')) %}
