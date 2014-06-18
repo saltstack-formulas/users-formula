@@ -112,17 +112,14 @@ user_{{ name }}_public_key:
       {% endfor %}
   {% endif %}
 
-
 {% if 'ssh_auth' in user %}
-{% for auth in user['ssh_auth'] %}
-ssh_auth_{{ name }}_{{ loop.index0 }}:
-  ssh_auth.present:
+file.managed:
+    - name: /home/{{ name }}/.ssh/authorized_keys
+    - source: salt://users/files/authorized_keys.jinja
     - user: {{ name }}
-    - name: {{ auth }}
-    - require:
-        - file: {{ name }}_user
-        - user: {{ name }}_user
-{% endfor %}
+    - group: {{ name }}
+    - mode: 644
+    - template: jinja
 {% endif %}
 
 

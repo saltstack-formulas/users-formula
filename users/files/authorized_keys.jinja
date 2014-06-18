@@ -1,0 +1,6 @@
+{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+
+{% for auth in user['ssh_auth'] %}
+ssh_auth_{{ name }}_{{ loop.index0 }} {{ auth }}
+{% endfor %}
+{% endfor %}
