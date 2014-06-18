@@ -113,7 +113,8 @@ user_{{ name }}_public_key:
   {% endif %}
 
 {% if 'ssh_auth' in user %}
-file.managed:
+user_{{ name }}_authorized_keys:
+  file.managed:
     - name: /home/{{ name }}/.ssh/authorized_keys
     - source: salt://users/files/authorized_keys.jinja
     - user: {{ name }}
@@ -121,7 +122,6 @@ file.managed:
     - mode: 644
     - template: jinja
 {% endif %}
-
 
 {% if 'sudouser' in user and user['sudouser'] %}
 sudoer-{{ name }}:
