@@ -1,7 +1,7 @@
 # vim: sts=2 ts=2 sw=2 et ai
 {% set users = salt['grains.filter_by']({
   'Debian': {
-    'sudoers_dir': '/etc/sudoers.d/',
+    'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
     'root_group': 'root',
     'visudo_shell': '/bin/bash',
