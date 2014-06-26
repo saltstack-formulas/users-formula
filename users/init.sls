@@ -34,39 +34,39 @@ include:
       - group: {{ user_group }}
   group.present:
     - name: {{ user_group }}
-    {%- if 'prime_group' in user and 'gid' in user['prime_group'] %}
+{%- if 'prime_group' in user and 'gid' in user['prime_group'] %}
     - gid: {{ user['prime_group']['gid'] }}
-    {%- elif 'uid' in user %}
+{%- elif 'uid' in user %}
     - gid: {{ user['uid'] }}
-    {%- endif %}
+{%- endif %}
   user.present:
     - name: {{ name }}
     - home: {{ home }}
     - shell: {{ user.get('shell', '/bin/bash') }}
-    {% if 'uid' in user -%}
+{% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
-    {% endif -%}
-    {% if 'password' in user -%}
+{% endif -%}
+{% if 'password' in user -%}
     - password: {{ user['password'] }}
-    {% endif -%}
-    {% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
+{% endif -%}
+{% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
     - gid: {{ user['prime_group']['gid'] }}
-    {% else -%}
+{% else -%}
     - gid_from_name: True
-    {% endif -%}
-    {% if 'fullname' in user %}
+{% endif -%}
+{% if 'fullname' in user %}
     - fullname: {{ user['fullname'] }}
-    {% endif -%}
+{% endif -%}
     - groups:
       - {{ user_group }}
-      {% for group in user.get('groups', []) -%}
+{% for group in user.get('groups', []) -%}
       - {{ group }}
-      {% endfor %}
+{% endfor %}
     - require:
       - group: {{ user_group }}
-      {% for group in user.get('groups', []) -%}
+{% for group in user.get('groups', []) -%}
       - group: {{ group }}
-      {% endfor %}
+{% endfor %}
 
 user_keydir_{{ name }}:
   file.directory:
@@ -78,12 +78,12 @@ user_keydir_{{ name }}:
     - require:
       - user: {{ name }}
       - group: {{ user_group }}
-      {%- for group in user.get('groups', []) %}
+{%- for group in user.get('groups', []) %}
       - group: {{ group }}
-      {%- endfor %}
+{%- endfor %}
 
-  {% if 'ssh_keys' in user %}
-  {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
+{% if 'ssh_keys' in user %}
+{% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
 user_{{ name }}_private_key:
   file.managed:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}
@@ -94,9 +94,9 @@ user_{{ name }}_private_key:
     - contents_pillar: users:{{ name }}:ssh_keys:privkey
     - require:
       - user: {{ name }}_user
-      {% for group in user.get('groups', []) %}
+{% for group in user.get('groups', []) %}
       - group: {{ name }}_{{ group }}_group
-      {% endfor %}
+{% endfor %}
 user_{{ name }}_public_key:
   file.managed:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}.pub
@@ -107,10 +107,10 @@ user_{{ name }}_public_key:
     - contents_pillar: users:{{ name }}:ssh_keys:pubkey
     - require:
       - user: {{ name }}_user
-      {% for group in user.get('groups', []) %}
+{% for group in user.get('groups', []) %}
       - group: {{ name }}_{{ group }}_group
-      {% endfor %}
-  {% endif %}
+{% endfor %}
+{% endif %}
 
 {% if 'ssh_auth' in user %}
 user_{{ name }}_authorized_keys:
