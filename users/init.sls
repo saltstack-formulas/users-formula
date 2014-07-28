@@ -1,8 +1,6 @@
 # vim: sts=2 ts=2 sw=2 et ai
 {% from "users/map.jinja" import users with context %}
-
-include:
-  - users.sudo
+{% set used_sudo = False %}
 
 {% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
@@ -127,6 +125,12 @@ ssh_auth_{{ name }}_{{ loop.index0 }}:
 
 
 {% if 'sudouser' in user and user['sudouser'] %}
+{% if not used_sudo %}
+{% set used_sudo = True %}
+include:
+  - users.sudo
+{% endif %}
+
 sudoer-{{ name }}:
   file.managed:
     - name: {{ users.sudoers_dir }}{{ name }}
