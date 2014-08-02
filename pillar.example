@@ -24,6 +24,8 @@ users:
       pubkey: PUBLICKEY
     ssh_auth:
       - PUBLICKEY
+    ssh_auth.absent:
+      - PUBLICKEY_TO_BE_REMOVED
 
   ## Absent user
   cuser:
