@@ -141,7 +141,8 @@ sudoer-{{ name }}:
 {% for rule in user['sudo_rules'] %}
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
   cmd.run:
-    - name: 'visudo -cf - <<<"$rule"'
+    - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
+    - stateful: True
     - shell: {{ users.visudo_shell }} 
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
