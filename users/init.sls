@@ -123,6 +123,17 @@ ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% if 'ssh_auth.absent' in user %}
+{% for auth in user['ssh_auth.absent'] %}
+ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
+  ssh_auth.absent:
+    - user: {{ name }}
+    - name: {{ auth }}
+    - require:
+        - file: {{ name }}_user
+        - user: {{ name }}_user
+{% endfor %}
+{% endif %}
 
 {% if 'sudouser' in user and user['sudouser'] %}
 {% if not used_sudo %}
@@ -141,7 +152,8 @@ sudoer-{{ name }}:
 {% for rule in user['sudo_rules'] %}
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
   cmd.run:
-    - name: 'visudo -cf - <<<"$rule"'
+    - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
+    - stateful: True
     - shell: {{ users.visudo_shell }} 
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
