@@ -26,7 +26,7 @@
     - name: {{ home }}
     - user: {{ name }}
     - group: {{ user_group }}
-    - mode: 0755
+    - mode: {{ user.get('user_dir_mode', '0750') }}
     - require:
       - user: {{ name }}
       - group: {{ user_group }}
