@@ -100,7 +100,7 @@ user_{{ name }}_public_key:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}.pub
     - user: {{ name }}
     - group: {{ user_group }}
-    - mode: 644
+    - mode: 600
     - show_diff: False
     - contents_pillar: users:{{ name }}:ssh_keys:pubkey
     - require:
