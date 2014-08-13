@@ -40,7 +40,7 @@
   user.present:
     - name: {{ name }}
     - home: {{ home }}
-    - shell: {{ user.get('shell', '/bin/bash') }}
+    - shell: {{ users.get('visudo_shell', '/bin/bash') }}
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
     {% endif -%}
