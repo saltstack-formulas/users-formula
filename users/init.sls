@@ -58,7 +58,9 @@
     {% if not user.get('createhome', True) %}
     - createhome: False
     {% endif %}
-    {% if not user.get('remove_groups', True) %}
+    {% if user.get('remove_groups', True) %}
+    - remove_groups: True
+    {% else %}
     - remove_groups: False
     {% endif %}
     - groups:
