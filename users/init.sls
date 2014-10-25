@@ -148,7 +148,7 @@ include:
 
 sudoer-{{ name }}:
   file.managed:
-    - name: {{ users.sudoers_dir }}{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ name }}
     - user: root
     - group: {{ users.root_group }} 
     - mode: '0440'
@@ -163,10 +163,10 @@ sudoer-{{ name }}:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
     - require_in:
-      - file: {{ users.sudoers_dir }}{{ name }}
+      - file: {{ users.sudoers_dir }}/{{ name }}
 {% endfor %}
 
-{{ users.sudoers_dir }}{{ name }}:
+{{ users.sudoers_dir }}/{{ name }}:
   file.managed:
     - contents: |
       {%- for rule in user['sudo_rules'] %}
@@ -177,9 +177,9 @@ sudoer-{{ name }}:
       - file: sudoer-{{ name }}
 {% endif %}
 {% else %}
-{{ users.sudoers_dir }}{{ name }}:
+{{ users.sudoers_dir }}/{{ name }}:
   file.absent:
-    - name: {{ users.sudoers_dir }}{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ name }}
 {% endif %}
 
 {% endfor %}
@@ -197,17 +197,17 @@ sudoer-{{ name }}:
 {% else %}
   user.absent
 {% endif -%}
-{{ users.sudoers_dir }}{{ name }}:
+{{ users.sudoers_dir }}/{{ name }}:
   file.absent:
-    - name: {{ users.sudoers_dir }}{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ name }}
 {% endfor %}
 
 {% for user in pillar.get('absent_users', []) %}
 {{ user }}:
   user.absent
-{{ users.sudoers_dir }}{{ user }}:
+{{ users.sudoers_dir }}/{{ user }}:
   file.absent:
-    - name: {{ users.sudoers_dir }}{{ user }}
+    - name: {{ users.sudoers_dir }}/{{ user }}
 {% endfor %}
 
 {% for group in pillar.get('absent_groups', []) %}

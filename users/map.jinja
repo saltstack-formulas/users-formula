@@ -1,7 +1,7 @@
 # vim: sts=2 ts=2 sw=2 et ai
 {% set users = salt['grains.filter_by']({
   'Debian': {
-    'sudoers_dir': '/etc/sudoers.d/',
+    'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
     'root_group': 'root',
     'shell': '/bin/bash',
@@ -10,7 +10,7 @@
     'sudo_package': 'sudo',
   },
   'Gentoo': {
-    'sudoers_dir': '/etc/sudoers.d/',
+    'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
     'root_group': 'root',
     'shell': '/bin/bash',
@@ -19,7 +19,7 @@
     'sudo_package': 'app-admin/sudo',
   },
   'FreeBSD': {
-    'sudoers_dir': '/usr/local/etc/sudoers.d/',
+    'sudoers_dir': '/usr/local/etc/sudoers.d',
     'sudoers_file': '/usr/local/etc/sudoers',
     'root_group': 'wheel',
     'shell': '/bin/csh',
@@ -28,7 +28,7 @@
     'sudo_package': 'sudo',
   },
   'default': {
-    'sudoers_dir': '/etc/sudoers.d/',
+    'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
     'root_group': 'root',
     'shell': '/bin/bash',
