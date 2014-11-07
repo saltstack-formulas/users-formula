@@ -1,4 +1,10 @@
-users:
+defaults:
+  prime_group:
+    name: primarygroup
+    id: 501
+  groups: {}
+
+  users:
   ## Minimal required pillar values
   auser:
     fullname: A User

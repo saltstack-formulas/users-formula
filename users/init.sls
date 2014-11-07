@@ -2,6 +2,15 @@
 {% from "users/map.jinja" import users with context %}
 {% set used_sudo = False %}
 
+{% set defaults = pillar.get('defaults', {}) %}
+
+{% for group in defaults.get('groups', []) %}
+{{ group }}_group:
+  group:
+    - name: {{ group }}
+    - present
+{% endfor %}
+
 {% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
@@ -10,6 +19,8 @@
 
 {%- if 'prime_group' in user and 'name' in user['prime_group'] %}
 {%- set user_group = user.prime_group.name -%}
+{%- elif 'prime_group' in defaults and 'name' in defaults['prime_group'] %}
+{%- set user_group = defaults.prime_group.name -%}
 {%- else -%}
 {%- set user_group = name -%}
 {%- endif %}
@@ -34,13 +45,15 @@
     - name: {{ user_group }}
     {%- if 'prime_group' in user and 'gid' in user['prime_group'] %}
     - gid: {{ user['prime_group']['gid'] }}
+    {%- elif 'prime_group' in defaults and 'gid' in defaults['prime_group'] %}
+    - gid: {{ defaults['prime_group']['gid'] }}
     {%- elif 'uid' in user %}
     - gid: {{ user['uid'] }}
     {%- endif %}
   user.present:
     - name: {{ name }}
     - home: {{ home }}
-    - shell: {{ user.get('shell', users.get('shell', '/bin/bash')) }}
+    - shell: {{ user.get('shell', defaults.get('shell', '/bin/bash')) }}
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
     {% endif -%}
@@ -49,24 +62,32 @@
     {% endif -%}
     {% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
     - gid: {{ user['prime_group']['gid'] }}
+    {% elif 'prime_group' in defaults and 'gid' in defaults['prime_group'] -%}
+    - gid: {{ defaults['prime_group']['gid'] }}
     {% else -%}
     - gid_from_name: True
     {% endif -%}
     {% if 'fullname' in user %}
     - fullname: {{ user['fullname'] }}
     {% endif -%}
-    {% if not user.get('createhome', True) %}
+    {% if not user.get('createhome', defaults.get('createhome', True)) %}
     - createhome: False
     {% endif %}
-    - remove_groups: {{ user.get('remove_groups', 'False') }}
+    - remove_groups: {{ user.get('remove_groups', defaults.get('remove_groups', 'False')) }}
     - groups:
       - {{ user_group }}
       {% for group in user.get('groups', []) -%}
       - {{ group }}
       {% endfor %}
+      {% for group in defaults.get('groups', []) -%}
+      - {{ group }}
+      {% endfor %}
     - require:
       - group: {{ user_group }}
       {% for group in user.get('groups', []) -%}
+      - group: {{ group }}
+      {% endfor %}
+      {% for group in defaults.get('groups', []) -%}
       - group: {{ group }}
       {% endfor %}
 
