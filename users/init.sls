@@ -2,7 +2,7 @@
 {% from "users/map.jinja" import users with context %}
 {% set used_sudo = False %}
 
-{% set defaults = pillar.get('defaults', {}) %}
+{% set defaults = pillar.get('users', {}).get('defaults', {}) %}
 
 {% for group in defaults.get('groups', []) %}
 {{ group }}_group:
@@ -11,7 +11,7 @@
     - present
 {% endfor %}
 
-{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+{% for name, user in pillar.get('users', {}).items() if (user.absent is not defined or not user.absent) and not name == 'defaults' %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -37,7 +37,7 @@
     - name: {{ home }}
     - user: {{ name }}
     - group: {{ user_group }}
-    - mode: {{ user.get('user_dir_mode', '0750') }}
+    - mode: {{ user.get('user_dir_mode', defaults.get('user_dir_mode', '0750')) }}
     - require:
       - user: {{ name }}
       - group: {{ user_group }}
@@ -104,6 +104,9 @@ user_keydir_{{ name }}:
       {%- for group in user.get('groups', []) %}
       - group: {{ group }}
       {%- endfor %}
+      {%- for group in defaults.get('groups', []) %}
+      - group: {{ group }}
+      {%- endfor %}
 
   {% if 'ssh_keys' in user %}
   {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
@@ -120,6 +123,9 @@ user_{{ name }}_private_key:
       {% for group in user.get('groups', []) %}
       - group: {{ name }}_{{ group }}_group
       {% endfor %}
+      {% for group in defaults.get('groups', []) %}
+      - group: {{ name }}_{{ group }}_group
+      {% endfor %}
 user_{{ name }}_public_key:
   file.managed:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}.pub
@@ -131,6 +137,9 @@ user_{{ name }}_public_key:
     - require:
       - user: {{ name }}_user
       {% for group in user.get('groups', []) %}
+      - group: {{ name }}_{{ group }}_group
+      {% endfor %}
+      {% for group in defaults.get('groups', []) %}
       - group: {{ name }}_{{ group }}_group
       {% endfor %}
   {% endif %}
