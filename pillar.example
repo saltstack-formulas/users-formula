@@ -8,6 +8,7 @@ users:
     fullname: B User
     password: $6$w.............
     home: /custom/buser
+    createhome: True
     sudouser: True
     sudo_rules: 
       - ALL=(root) /usr/bin/find
@@ -24,6 +25,8 @@ users:
       pubkey: PUBLICKEY
     ssh_auth:
       - PUBLICKEY
+    ssh_auth.absent:
+      - PUBLICKEY_TO_BE_REMOVED
 
   ## Absent user
   cuser:
