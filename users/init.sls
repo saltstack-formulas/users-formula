@@ -45,7 +45,7 @@
     - uid: {{ user['uid'] }}
     {% endif -%}
     {% if 'password' in user -%}
-    - password: {{ user['password'] }}
+    - password: '{{ user['password'] }}'
     {% endif -%}
     {% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
     - gid: {{ user['prime_group']['gid'] }}
