@@ -58,6 +58,9 @@
     {% if not user.get('createhome', True) %}
     - createhome: False
     {% endif %}
+    {% if 'expire' in user -%}
+    - expire: {{ user['expire'] }}
+    {% endif -%}
     - remove_groups: {{ user.get('remove_groups', 'False') }}
     - groups:
       - {{ user_group }}
