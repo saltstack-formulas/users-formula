@@ -9,8 +9,9 @@ users:
     password: $6$w.............
     home: /custom/buser
     createhome: True
+    expire: 16426
     sudouser: True
-    sudo_rules: 
+    sudo_rules:
       - ALL=(root) /usr/bin/find
       - ALL=(otheruser) /usr/bin/script.sh
     shell: /bin/bash

@@ -22,6 +22,7 @@
 {% endfor %}
 
 {{ name }}_user:
+  {% if user.get('createhome', True) %}
   file.directory:
     - name: {{ home }}
     - user: {{ name }}
@@ -30,6 +31,7 @@
     - require:
       - user: {{ name }}
       - group: {{ user_group }}
+  {%- endif %}
   group.present:
     - name: {{ user_group }}
     {%- if 'prime_group' in user and 'gid' in user['prime_group'] %}
@@ -58,6 +60,9 @@
     {% if not user.get('createhome', True) %}
     - createhome: False
     {% endif %}
+    {% if 'expire' in user -%}
+    - expire: {{ user['expire'] }}
+    {% endif -%}
     - remove_groups: {{ user.get('remove_groups', 'False') }}
     - groups:
       - {{ user_group }}
