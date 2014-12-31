@@ -22,7 +22,7 @@
 {% endfor %}
 
 {{ name }}_user:
-  {% if user.get('createhome', True) != False %}
+  {% if user.get('createhome', True) %}
   file.directory:
     - name: {{ home }}
     - user: {{ name }}
