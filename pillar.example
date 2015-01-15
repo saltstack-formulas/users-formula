@@ -28,6 +28,18 @@ users:
       - PUBLICKEY
     ssh_auth.absent:
       - PUBLICKEY_TO_BE_REMOVED
+    google_auth:
+      ssh: |
+        SOMEGAUTHHASHVAL
+        " RESETTING_TIME_SKEW 46956472+2 46991595-2
+        " RATE_LIMIT 3 30 1415800560
+        " DISALLOW_REUSE 47193352
+        " TOTP_AUTH
+        11111111
+        22222222
+        33333333
+        44444444
+        55555555
 
   ## Absent user
   cuser:
