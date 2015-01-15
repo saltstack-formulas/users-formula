@@ -1,6 +1,29 @@
 # vim: sts=2 ts=2 sw=2 et ai
 {% from "users/map.jinja" import users with context %}
-{% set used_sudo = False %}
+{% set used_sudo = [] %}
+{% set used_googleauth = [] %}
+
+{%- for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+{%- if user == None -%}
+{%- set user = {} -%}
+{%- endif -%}
+{%- if 'sudouser' in user and user['sudouser'] %}
+{%- do used_sudo.append(1) %}
+{%- endif %}
+{%- if 'google_auth' in user %}
+{%- do used_googleauth.append(1) %}
+{%- endif %}
+{%- endfor %}
+
+{%- if used_sudo or used_googleauth %}
+include:
+{%- if used_sudo %}
+  - users.sudo
+{%- endif %}
+{%- if used_googleauth %}
+  - users.googleauth
+{%- endif %}
+{%- endif %}
 
 {% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
@@ -145,11 +168,6 @@ ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
 {% endif %}
 
 {% if 'sudouser' in user and user['sudouser'] %}
-{% if not used_sudo %}
-{% set used_sudo = True %}
-include:
-  - users.sudo
-{% endif %}
 
 sudoer-{{ name }}:
   file.managed:
@@ -186,6 +204,21 @@ sudoer-{{ name }}:
   file.absent:
     - name: {{ users.sudoers_dir }}/{{ name }}
 {% endif %}
+
+{%- if 'google_auth' in user %}
+{%- for svc in user['google_auth'] %}
+googleauth-{{ svc }}-{{ name }}:
+  file.managed:
+    - replace: false
+    - name: {{ users.googleauth_dir }}/{{ name }}_{{ svc }}
+    - contents_pillar: 'users:{{ name }}:google_auth:{{ svc }}'
+    - user: root
+    - group: {{ users.root_group }}
+    - mode: 600
+    - require:
+      - pkg: googleauth-package
+{%- endfor %}
+{%- endif %}
 
 {% endfor %}
 
