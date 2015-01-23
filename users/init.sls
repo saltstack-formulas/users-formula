@@ -173,7 +173,7 @@ sudoer-{{ name }}:
   file.managed:
     - name: {{ users.sudoers_dir }}/{{ name }}
     - user: root
-    - group: {{ users.root_group }} 
+    - group: {{ users.root_group }}
     - mode: '0440'
 {% if 'sudo_rules' in user %}
 {% for rule in user['sudo_rules'] %}
@@ -181,7 +181,7 @@ sudoer-{{ name }}:
   cmd.run:
     - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
     - stateful: True
-    - shell: {{ users.visudo_shell }} 
+    - shell: {{ users.visudo_shell }}
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
