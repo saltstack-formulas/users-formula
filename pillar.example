@@ -28,6 +28,10 @@ users:
       - PUBLICKEY
     ssh_auth.absent:
       - PUBLICKEY_TO_BE_REMOVED
+    # Generates an authorized_keys file for the user
+    # with the given keys
+    ssh_auth_file:
+      - PUBLICKEY
     google_auth:
       ssh: |
         SOMEGAUTHHASHVAL

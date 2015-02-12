@@ -167,6 +167,18 @@ ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% if 'ssh_auth_file' in user %}
+{{ home }}/.ssh/authorized_keys:
+  file.managed:
+    - user: {{ name }}
+    - group: {{ name }}
+    - mode: 600
+    - contents: |
+        {% for auth in user.ssh_auth_file -%}
+        {{ auth }}
+        {% endfor -%}
+{% endif %}
+
 {% if 'sudouser' in user and user['sudouser'] %}
 
 sudoer-{{ name }}:
