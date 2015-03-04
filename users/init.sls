@@ -169,19 +169,13 @@ ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
 
 {% if 'sudouser' in user and user['sudouser'] %}
 
-sudoer-{{ name }}:
-  file.managed:
-    - name: {{ users.sudoers_dir }}/{{ name }}
-    - user: root
-    - group: {{ users.root_group }} 
-    - mode: '0440'
 {% if 'sudo_rules' in user %}
 {% for rule in user['sudo_rules'] %}
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
   cmd.run:
     - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
     - stateful: True
-    - shell: {{ users.visudo_shell }} 
+    - shell: {{ users.visudo_shell }}
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
@@ -191,13 +185,16 @@ sudoer-{{ name }}:
 
 {{ users.sudoers_dir }}/{{ name }}:
   file.managed:
+    - user: root
+    - group: {{ users.root_group }}
+    - mode: '0440'
     - contents: |
       {%- for rule in user['sudo_rules'] %}
         {{ name }} {{ rule }}
       {%- endfor %}
     - require:
       - file: sudoer-defaults
-      - file: sudoer-{{ name }}
+
 {% endif %}
 {% else %}
 {{ users.sudoers_dir }}/{{ name }}:
@@ -252,4 +249,3 @@ googleauth-{{ svc }}-{{ name }}:
 {{ group }}:
   group.absent
 {% endfor %}
-
