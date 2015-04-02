@@ -32,6 +32,11 @@ users:
     # with the given keys
     ssh_auth_file:
       - PUBLICKEY
+    # If you prefer to keep public keys as files rather
+    # than inline in pillar, this works.
+    ssh_auth_sources:
+      - salt://keys/buser.id_rsa.pub
+
     google_auth:
       ssh: |
         SOMEGAUTHHASHVAL

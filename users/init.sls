@@ -166,6 +166,18 @@ ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% if 'ssh_auth_sources' in user %}
+{% for pubkey_file in user['ssh_auth_sources'] %}
+ssh_auth_source_{{ name }}_{{ loop.index0 }}:
+  ssh_auth.present:
+    - user: {{ name }}
+    - source: {{ pubkey_file }}
+    - require:
+        - file: {{ name }}_user
+        - user: {{ name }}_user
+{% endfor %}
+{% endif %}
+
 {% if 'ssh_auth.absent' in user %}
 {% for auth in user['ssh_auth.absent'] %}
 ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
