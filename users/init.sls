@@ -198,6 +198,7 @@ sudoer-{{ name }}:
     - user: root
     - group: {{ users.root_group }} 
     - mode: '0440'
+{% if 'sudo_rules' in user or 'sudo_defaults' in user %}
 {% if 'sudo_rules' in user %}
 {% for rule in user['sudo_rules'] %}
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
@@ -211,13 +212,35 @@ sudoer-{{ name }}:
     - require_in:
       - file: {{ users.sudoers_dir }}/{{ name }}
 {% endfor %}
+{% endif %}
+{% if 'sudo_defaults' in user %}
+{% for entry in user['sudo_defaults'] %}
+"validate {{ name }} sudo Defaults {{ loop.index0 }} {{ name }} {{ entry }}":
+  cmd.run:
+    - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
+    - stateful: True
+    - shell: {{ users.visudo_shell }}
+    - env:
+      # Specify the rule via an env var to avoid shell quoting issues.
+      - rule: "Defaults:{{ name }} {{ entry }}"
+    - require_in:
+      - file: {{ users.sudoers_dir }}/{{ name }}
+{% endfor %}
+{% endif %}
 
 {{ users.sudoers_dir }}/{{ name }}:
   file.managed:
     - contents: |
+      {%- if 'sudo_defaults' in user %}
+      {%- for entry in user['sudo_defaults'] %}
+        Defaults:{{ name }} {{ entry }}
+      {%- endfor %}
+      {%- endif %}
+      {%- if 'sudo_rules' in user %}
       {%- for rule in user['sudo_rules'] %}
         {{ name }} {{ rule }}
       {%- endfor %}
+      {%- endif %}
     - require:
       - file: sudoer-defaults
       - file: sudoer-{{ name }}
