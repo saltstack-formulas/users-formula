@@ -15,7 +15,7 @@ users:
       - ALL=(root) /usr/bin/find
       - ALL=(otheruser) /usr/bin/script.sh
     sudo_defaults:
-      - !requiretty
+      - '!requiretty'
     shell: /bin/bash
     prime_group:
       name: primarygroup
