@@ -166,6 +166,23 @@ ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% if 'ssh_keys_pillar' in user %}
+{% for key_name, pillar_name in user['ssh_keys_pillar'].iteritems()  %}
+ssh_keys_files_{{ name }}_{{ key_name }}_pub:
+  file.managed:
+    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name
+    }}.pub
+    - contents: |
+        {{ pillar[pillar_name][key_name]['pubkey'] }}
+ssh_keys_files_{{ name }}_{{ key_name }}_priv:
+  file.managed:
+    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name
+    }}
+    - contents: |
+        {{ pillar[pillar_name][key_name]['privkey'] | indent(8) }}
+{% endfor %}
+{% endif %}
+
 {% if 'ssh_auth_sources' in user %}
 {% for pubkey_file in user['ssh_auth_sources'] %}
 ssh_auth_source_{{ name }}_{{ loop.index0 }}:
@@ -196,7 +213,7 @@ sudoer-{{ name }}:
   file.managed:
     - name: {{ users.sudoers_dir }}/{{ name }}
     - user: root
-    - group: {{ users.root_group }} 
+    - group: {{ users.root_group }}
     - mode: '0440'
 {% if 'sudo_rules' in user or 'sudo_defaults' in user %}
 {% if 'sudo_rules' in user %}
@@ -205,7 +222,7 @@ sudoer-{{ name }}:
   cmd.run:
     - name: 'visudo -cf - <<<"$rule" | { read output; if [[ $output != "stdin: parsed OK" ]] ; then echo $output ; fi }'
     - stateful: True
-    - shell: {{ users.visudo_shell }} 
+    - shell: {{ users.visudo_shell }}
     - env:
       # Specify the rule via an env var to avoid shell quoting issues.
       - rule: "{{ name }} {{ rule }}"
