@@ -44,6 +44,17 @@ users:
     # than inline in pillar, this works.
     ssh_auth_sources:
       - salt://keys/buser.id_rsa.pub
+    # Manage the ~/.ssh/config file
+    ssh_config:
+      all:
+        hostname: "*"
+        options:
+          - "StrictHostKeyChecking no"
+          - "UserKnownHostsFile=/dev/null"
+      importanthost:
+        hostname: "needcheck.example.com"
+        options:
+          - "StrictHostKeyChecking yes"
 
     google_auth:
       ssh: |

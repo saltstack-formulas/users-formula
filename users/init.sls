@@ -208,6 +208,24 @@ users_ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% if 'ssh_config' in user %}
+users_ssh_config_{{ name }}:
+  file.managed:
+    - name: {{ home }}/.ssh/config
+    - user: {{ name }}
+    - group: {{ user_group }}
+    - mode: 640
+    - contents: |
+        # Managed by Saltstack
+        {% for label, setting in user.ssh_config.items() %}
+        # {{ label }}
+        Host {{ setting.get('hostname') }}
+          {%- for opts in setting.get('options') %}
+          {{ opts }}
+          {%- endfor %}
+        {% endfor -%}
+{% endif %}
+
 {% if 'sudouser' in user and user['sudouser'] %}
 
 users_sudoer-{{ name }}:
