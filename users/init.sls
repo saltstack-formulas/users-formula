@@ -217,6 +217,7 @@ users_ssh_config_{{ name }}:
     - mode: 640
     - contents: |
         # Managed by Saltstack
+        # Do Not Edit
         {% for label, setting in user.ssh_config.items() %}
         # {{ label }}
         Host {{ setting.get('hostname') }}
