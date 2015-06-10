@@ -27,3 +27,15 @@ and associated keys. Also configures sudo access, and absent users.
 
 Ensures the sudo group exists, the sudo package is installed and the sudo file
 is configured.
+
+``users.bashrc``
+----------------
+
+Ensures the bashrc file exists in the users home directory
+
+``users.vimrc``
+---------------
+
+Ensures the vimrc file exists in the users home directory.
+This depends on the vim-formula to be installed
+
