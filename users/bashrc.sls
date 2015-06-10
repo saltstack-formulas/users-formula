@@ -20,7 +20,7 @@ extend:
       - owner: {{ name }}
       - group: {{ user_group }}
       - mode: 644
-      - sources: 
+      - source: 
         - salt://users/files/bashrc/{{ name }}/bashrc
         - salt://users/files/bashrc/bashrc
 {% endfor %}
