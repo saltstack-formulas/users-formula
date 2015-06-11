@@ -9,6 +9,8 @@ users:
     password: $6$w.............
     home: /custom/buser
     createhome: True
+    manage_vimrc: False
+    manage_bashrc: False
     expire: 16426
     sudouser: True
     sudo_rules:
