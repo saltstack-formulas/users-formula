@@ -298,7 +298,7 @@ users_googleauth-{{ svc }}-{{ name }}:
     - contents_pillar: 'users:{{ name }}:google_auth:{{ svc }}'
     - user: root
     - group: {{ users.root_group }}
-    - mode: 600
+    - mode: 400
     - require:
       - pkg: users_googleauth-package
 {%- endfor %}
