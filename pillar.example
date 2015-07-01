@@ -58,6 +58,7 @@ users:
         options:
           - "StrictHostKeyChecking yes"
 
+    google_2fa: True
     google_auth:
       ssh: |
         SOMEGAUTHHASHVAL
