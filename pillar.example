@@ -13,6 +13,13 @@ users:
     manage_bashrc: False
     expire: 16426
     sudouser: True
+    # sudo_rules doesn't need the username as a prefix for the rule
+    # this is added automatically by the formula.
+    # ----------------------------------------------------------------------
+    # In case your sudo_rules have a colon please have in mind to not leave
+    # spaces around it. For example:
+    # ALL=(ALL) NOPASSWD: ALL    <--- THIS WILL NOT WORK (Besides syntax is ok)
+    # ALL=(ALL) NOPASSWD:ALL     <--- THIS WILL WORK
     sudo_rules:
       - ALL=(root) /usr/bin/find
       - ALL=(otheruser) /usr/bin/script.sh
