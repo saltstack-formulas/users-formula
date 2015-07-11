@@ -3,7 +3,7 @@
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
 
-{%- for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+{%- for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -25,7 +25,7 @@ include:
 {%- endif %}
 {%- endif %}
 
-{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+{% for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -52,7 +52,7 @@ include:
     - group: {{ user_group }}
     - mode: {{ user.get('user_dir_mode', '0750') }}
     - require:
-      - user: {{ name }}
+      - user: {{ name }}_user
       - group: {{ user_group }}
   {%- endif %}
   group.present:
@@ -101,6 +101,7 @@ include:
       - group: {{ group }}
       {% endfor %}
 
+  {% if 'ssh_keys' in user or 'ssh_auth' in user or 'ssh_auth.absent' in user %}
 user_keydir_{{ name }}:
   file.directory:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh
@@ -114,6 +115,7 @@ user_keydir_{{ name }}:
       {%- for group in user.get('groups', []) %}
       - group: {{ group }}
       {%- endfor %}
+  {% endif %}
 
   {% if 'ssh_keys' in user %}
   {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
@@ -225,7 +227,7 @@ googleauth-{{ svc }}-{{ name }}:
 
 {% endfor %}
 
-{% for name, user in pillar.get('users', {}).items() if user.absent is defined and user.absent %}
+{% for name, user in pillar.get('users', {}).iteritems() if user.absent is defined and user.absent %}
 {{ name }}:
 {% if 'purge' in user or 'force' in user %}
   user.absent:
