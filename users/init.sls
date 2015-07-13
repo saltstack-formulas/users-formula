@@ -3,7 +3,7 @@
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
 
-{%- for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+{%- for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -25,7 +25,7 @@ include:
 {%- endif %}
 {%- endif %}
 
-{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
+{% for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -52,7 +52,7 @@ users_{{ name }}_user:
     - group: {{ user_group }}
     - mode: {{ user.get('user_dir_mode', '0750') }}
     - require:
-      - user: {{ name }}
+      - user: users_{{ name }}_user
       - group: {{ user_group }}
   {%- endif %}
   group.present:
@@ -71,6 +71,9 @@ users_{{ name }}_user:
     {% endif -%}
     {% if 'password' in user -%}
     - password: '{{ user['password'] }}'
+    {% endif -%}
+    {% if user.get('system', False) -%}
+    - system: True
     {% endif -%}
     {% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
     - gid: {{ user['prime_group']['gid'] }}
@@ -98,7 +101,9 @@ users_{{ name }}_user:
       - group: {{ group }}
       {% endfor %}
 
-users_user_keydir_{{ name }}:
+
+  {% if 'ssh_keys' in user or 'ssh_auth' in user or 'ssh_auth.absent' in user %}
+user_keydir_{{ name }}:
   file.directory:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh
     - user: {{ name }}
@@ -111,6 +116,7 @@ users_user_keydir_{{ name }}:
       {%- for group in user.get('groups', []) %}
       - group: {{ group }}
       {%- endfor %}
+  {% endif %}
 
   {% if 'ssh_keys' in user %}
   {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
@@ -306,7 +312,8 @@ users_googleauth-{{ svc }}-{{ name }}:
 
 {% endfor %}
 
-{% for name, user in pillar.get('users', {}).items() if user.absent is defined and user.absent %}
+
+{% for name, user in pillar.get('users', {}).iteritems() if user.absent is defined and user.absent %}
 users_absent_user_{{ name }}:
 {% if 'purge' in user or 'force' in user %}
   user.absent:
@@ -339,4 +346,3 @@ users_absent_group_{{ group }}:
   group.absent:
     - name: {{ group }}
 {% endfor %}
-
