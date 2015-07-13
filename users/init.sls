@@ -174,19 +174,33 @@ users_ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% endif %}
 
 {% if 'ssh_keys_pillar' in user %}
-{% for key_name, pillar_name in user['ssh_keys_pillar'].iteritems()  %}
-users_ssh_keys_files_{{ name }}_{{ key_name }}_pub:
+{% for key_name, pillar_name in user['ssh_keys_pillar'].items() %}
+user_ssh_keys_files_{{ name }}_{{ key_name }}_private_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name
-    }}.pub
-    - contents: |
-        {{ pillar[pillar_name][key_name]['pubkey'] }}
-users_ssh_keys_files_{{ name }}_{{ key_name }}_priv:
+    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name }}
+    - user: {{ name }}
+    - group: {{ user_group }}
+    - mode: 600
+    - show_diff: False
+    - contents_pillar: {{ pillar_name }}:{{ key_name }}:privkey
+    - require:
+      - user: users_{{ name }}_user
+      {% for group in user.get('groups', []) %}
+      - group: users_{{ name }}_{{ group }}_group
+      {% endfor %}
+user_ssh_keys_files_{{ name }}_{{ key_name }}_public_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name
-    }}
-    - contents: |
-        {{ pillar[pillar_name][key_name]['privkey'] | indent(8) }}
+    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name }}.pub
+    - user: {{ name }}
+    - group: {{ user_group }}
+    - mode: 644
+    - show_diff: False
+    - contents_pillar: {{ pillar_name }}:{{ key_name }}:pubkey
+    - require:
+      - user: users_{{ name }}_user
+      {% for group in user.get('groups', []) %}
+      - group: users_{{ name }}_{{ group }}_group
+      {% endfor %}
 {% endfor %}
 {% endif %}
 
