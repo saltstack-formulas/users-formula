@@ -9,11 +9,22 @@ users:
     password: $6$w.............
     home: /custom/buser
     createhome: True
+    manage_vimrc: False
+    manage_bashrc: False
     expire: 16426
     sudouser: True
+    # sudo_rules doesn't need the username as a prefix for the rule
+    # this is added automatically by the formula.
+    # ----------------------------------------------------------------------
+    # In case your sudo_rules have a colon please have in mind to not leave
+    # spaces around it. For example:
+    # ALL=(ALL) NOPASSWD: ALL    <--- THIS WILL NOT WORK (Besides syntax is ok)
+    # ALL=(ALL) NOPASSWD:ALL     <--- THIS WILL WORK
     sudo_rules:
-      - 'ALL=(root) /usr/bin/find'
-      - 'ALL=(otheruser) /usr/bin/script.sh'
+      - ALL=(root) /usr/bin/find
+      - ALL=(otheruser) /usr/bin/script.sh
+    sudo_defaults:
+      - '!requiretty'
     shell: /bin/bash
     prime_group:
       name: primarygroup
@@ -21,13 +32,40 @@ users:
     groups:
       - users
     ssh_key_type: rsa
+    # You can inline the private keys ...
     ssh_keys:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY
+    # ... or you can pull them from a different pillar,
+    # for example one called "ssh_keys":
+    ssh_keys_pillar:
+      id_rsa: "ssh_keys"
+      another_key_pair: "ssh_keys"
     ssh_auth:
       - PUBLICKEY
     ssh_auth.absent:
       - PUBLICKEY_TO_BE_REMOVED
+    # Generates an authorized_keys file for the user
+    # with the given keys
+    ssh_auth_file:
+      - PUBLICKEY
+    # If you prefer to keep public keys as files rather
+    # than inline in pillar, this works.
+    ssh_auth_sources:
+      - salt://keys/buser.id_rsa.pub
+    # Manage the ~/.ssh/config file
+    ssh_config:
+      all:
+        hostname: "*"
+        options:
+          - "StrictHostKeyChecking no"
+          - "UserKnownHostsFile=/dev/null"
+      importanthost:
+        hostname: "needcheck.example.com"
+        options:
+          - "StrictHostKeyChecking yes"
+
+    google_2fa: True
     google_auth:
       ssh: |
         SOMEGAUTHHASHVAL

@@ -2,31 +2,31 @@
 {% from "users/map.jinja" import users with context %}
 
 # Ensure availability of bash
-bash-package:
+users_bash-package:
   pkg.installed:
     - name: {{ users.bash_package }}
 
-sudo-group:
+users_sudo-group:
   group.present:
     - name: sudo
     - system: True
 
-sudo-package:
+users_sudo-package:
   pkg.installed:
     - name: {{ users.sudo_package }}
     - require:
-      - group: sudo-group
+      - group: users_sudo-group
       - file: {{ users.sudoers_dir }} 
 
-{{ users.sudoers_dir }}:
-  file:
-    - directory
+users_{{ users.sudoers_dir }}:
+  file.directory:
+    - name: {{ users.sudoers_dir }}
 
-sudoer-defaults:
+users_sudoer-defaults:
     file.append:
         - name: {{ users.sudoers_file }} 
         - require:
-          - pkg: sudo-package
+          - pkg: users_sudo-package
         - text:
           - Defaults   env_reset
           - Defaults   secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

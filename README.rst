@@ -27,3 +27,17 @@ and associated keys. Also configures sudo access, and absent users.
 
 Ensures the sudo group exists, the sudo package is installed and the sudo file
 is configured.
+
+``users.bashrc``
+----------------
+
+Ensures the bashrc file exists in the users home directory. Set manage_bashrc:
+True in pillar per user. Defaults to False
+
+``users.vimrc``
+---------------
+
+Ensures the vimrc file exists in the users home directory. Set manage_vimrc:
+True in pillar per user. Defaults to False
+This depends on the vim-formula to be installed
+
