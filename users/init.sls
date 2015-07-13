@@ -52,7 +52,7 @@ users_{{ name }}_user:
     - group: {{ user_group }}
     - mode: {{ user.get('user_dir_mode', '0750') }}
     - require:
-      - user: {{ name }}_user
+      - user: users_{{ name }}_user
       - group: {{ user_group }}
   {%- endif %}
   group.present:
