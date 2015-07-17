@@ -72,6 +72,9 @@ users_{{ name }}_user:
     {% if 'password' in user -%}
     - password: '{{ user['password'] }}'
     {% endif -%}
+    {% if 'enforce_password' in user -%}
+    - enforce_password: '{{ user['enforce_password'] }}'
+    {% endif -%}
     {% if user.get('system', False) -%}
     - system: True
     {% endif -%}
