@@ -1,31 +1,35 @@
-# vim: sts=2 ts=2 sw=2 et ai
-{% from "users/map.jinja" import users with context %}
+# -*- coding: utf-8 -*-
+# vim: ft=sls
+{##
+  Name: users/bashrc.sls
+  Description:
+    This file sets up bashrcs
+#}
 
-users_googleauth-package:
-  pkg.installed:
-    - name: {{ users.googleauth_package }}
-    - require:
-      - file: {{ users.googleauth_dir }} 
+{% from "users/map.jinja" import users_settings with context %}
 
-users_{{ users.googleauth_dir }}:
+users-googleauth-package:
   file.directory:
-    - name: {{ users.googleauth_dir }}
+    - name: {{ users_settings.googleauth_dir }}
     - user: root
-    - group: {{ users.root_group }}
+    - group: {{ users_settings.root_group }}
     - mode: 600
-
-{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
-{%- if 'google_auth' in user %}
-{%- for svc in user['google_auth'] %}
-{%- if user.get('google_2fa', True) %}
+  pkg.installed:
+    - name: {{ users_settings.googleauth_package }}
+{% for name, user in users_settings.items() %}
+  {% if user.absent is not defined or not user.absent  or user != None  %}
+    {% if 'google_auth' in user %}
+      {% for svc in user.get('google_auth') %}
+        {% if user.get('google_2fa', True) %}
 users_googleauth-pam-{{ svc }}-{{ name }}:
   file.replace:
     - name: /etc/pam.d/{{ svc }}
     - pattern: "^@include common-auth"
-    - repl: "auth       [success=done new_authtok_reqd=done default=die]   pam_google_authenticator.so user=root secret={{ users.googleauth_dir }}/${USER}_{{ svc }} echo_verification_code\n@include common-auth"
+    - repl: "auth       [success=done new_authtok_reqd=done default=die]   pam_google_authenticator.so user=root secret={{ users_settings.googleauth_dir }}/${USER}_{{ svc }} echo_verification_code\n@include common-auth"
     - unless: grep pam_google_authenticator.so /etc/pam.d/{{ svc }}
     - backup: .bak
-{%- endif %}
-{%- endfor %}
-{%- endif %}
-{%- endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
