@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-# vim: ft=jinja
-{##
-  This map.jinja pulls in
-  - os flavor related decisions
-  - merges in users pillar
-##}
-{% set os_settingss = salt['grains.filter_by']({
+# vim: sts=2 ts=2 sw=2 et ai
+{% set users = salt['grains.filter_by']({
   'Debian': {
     'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
@@ -50,12 +44,4 @@
     'sudo_package': 'sudo',
     'googleauth_package': 'libpam-google-authenticator',
   },
-}, merge=salt['pillar.get']('users:lookup'))
-%}
-{% 
-set users_settings = salt['pillar.get'](
-      'users',
-      default=os_settings,
-      merge=True)
-%}
-
+}, merge=salt['pillar.get']('users:lookup')) %}
