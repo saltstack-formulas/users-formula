@@ -105,7 +105,7 @@ users_{{ name }}_user:
       {% endfor %}
 
 
-  {% if 'ssh_keys' in user or 'ssh_auth' in user or 'ssh_auth_file' in user or 'ssh_auth.absent' in user %}
+  {% if 'ssh_keys' in user or 'ssh_auth' in user or 'ssh_auth_file' in user or 'ssh_auth.absent' in user or 'ssh_config' in user %}
 user_keydir_{{ name }}:
   file.directory:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh
