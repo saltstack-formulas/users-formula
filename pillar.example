@@ -12,6 +12,7 @@ users:
     createhome: True
     manage_vimrc: False
     manage_bashrc: False
+    manage_profile: False
     expire: 16426
     sudouser: True
     # sudo_rules doesn't need the username as a prefix for the rule
