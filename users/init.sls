@@ -39,9 +39,11 @@ include:
 
 {% for group in user.get('groups', []) %}
 users_{{ name }}_{{ group }}_group:
-  group:
+  group.present:
     - name: {{ group }}
-    - present
+    {% if group == 'sudo' %}
+    - system: True
+    {% endif %}
 {% endfor %}
 
 users_{{ name }}_user:
