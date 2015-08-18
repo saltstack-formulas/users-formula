@@ -3,7 +3,8 @@
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
 
-{%- for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
+{%- for name, user in pillar.get('users', {}).items()
+        if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -25,7 +26,8 @@ include:
 {%- endif %}
 {%- endif %}
 
-{% for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
+{% for name, user in pillar.get('users', {}).items()
+        if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -105,7 +107,11 @@ users_{{ name }}_user:
       {% endfor %}
 
 
-  {% if 'ssh_keys' in user or 'ssh_auth' in user or 'ssh_auth_file' in user or 'ssh_auth.absent' in user or 'ssh_config' in user %}
+  {% if 'ssh_keys' in user or
+      'ssh_auth' in user or
+      'ssh_auth_file' in user or
+      'ssh_auth.absent' in user or
+      'ssh_config' in user %}
 user_keydir_{{ name }}:
   file.directory:
     - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh
@@ -125,7 +131,8 @@ user_keydir_{{ name }}:
   {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
 users_user_{{ name }}_private_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}
+    - name: {{ user.get('home',
+                  '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
@@ -138,7 +145,8 @@ users_user_{{ name }}_private_key:
       {% endfor %}
 users_user_{{ name }}_public_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}.pub
+    - name: {{ user.get('home',
+                  '/home/{0}'.format(name)) }}/.ssh/{{ key_type }}.pub
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
@@ -180,7 +188,8 @@ users_ssh_auth_{{ name }}_{{ loop.index0 }}:
 {% for key_name, pillar_name in user['ssh_keys_pillar'].items() %}
 user_ssh_keys_files_{{ name }}_{{ key_name }}_private_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name }}
+    - name: {{ user.get('home',
+                  '/home/{0}'.format(name)) }}/.ssh/{{ key_name }}
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
@@ -193,7 +202,8 @@ user_ssh_keys_files_{{ name }}_{{ key_name }}_private_key:
       {% endfor %}
 user_ssh_keys_files_{{ name }}_{{ key_name }}_public_key:
   file.managed:
-    - name: {{ user.get('home', '/home/{0}'.format(name)) }}/.ssh/{{ key_name }}.pub
+    - name: {{ user.get('home',
+                  '/home/{0}'.format(name)) }}/.ssh/{{ key_name }}.pub
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
@@ -330,7 +340,8 @@ users_googleauth-{{ svc }}-{{ name }}:
 {% endfor %}
 
 
-{% for name, user in pillar.get('users', {}).iteritems() if user.absent is defined and user.absent %}
+{% for name, user in pillar.get('users', {}).items()
+        if user.absent is defined and user.absent %}
 users_absent_user_{{ name }}:
 {% if 'purge' in user or 'force' in user %}
   user.absent:
