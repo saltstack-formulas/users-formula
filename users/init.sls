@@ -3,7 +3,7 @@
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
 
-{%- for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
+{%- for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -25,7 +25,7 @@ include:
 {%- endif %}
 {%- endif %}
 
-{% for name, user in pillar.get('users', {}).iteritems() if user.absent is not defined or not user.absent %}
+{% for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -330,7 +330,7 @@ users_googleauth-{{ svc }}-{{ name }}:
 {% endfor %}
 
 
-{% for name, user in pillar.get('users', {}).iteritems() if user.absent is defined and user.absent %}
+{% for name, user in pillar.get('users', {}).items() if user.absent is defined and user.absent %}
 users_absent_user_{{ name }}:
 {% if 'purge' in user or 'force' in user %}
   user.absent:
