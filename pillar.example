@@ -51,6 +51,9 @@ users:
     # with the given keys
     ssh_auth_file:
       - PUBLICKEY
+    # ... or you can pull them from a different pillar similar to ssh_keys_pillar
+    ssh_auth_pillar:
+      id_rsa: "ssh_keys"
     # If you prefer to keep public keys as files rather
     # than inline in pillar, this works.
     ssh_auth_sources:

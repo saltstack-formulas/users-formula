@@ -159,17 +159,24 @@ users_user_{{ name }}_public_key:
       {% endfor %}
   {% endif %}
 
-{% if 'ssh_auth_file' in user %}
+{% if 'ssh_auth_file' in user or 'ssh_auth_pillar' in user %}
 users_authorized_keys_{{ name }}:
   file.managed:
     - name: {{ home }}/.ssh/authorized_keys
     - user: {{ name }}
     - group: {{ name }}
     - mode: 600
+{% if 'ssh_auth_file' in user %}
     - contents: |
         {% for auth in user.ssh_auth_file -%}
         {{ auth }}
         {% endfor -%}
+{% else %}
+    - contents: |
+        {%- for key_name, pillar_name in user['ssh_auth_pillar'].iteritems() %}
+        {{ salt['pillar.get'](pillar_name + ':' + key_name + ':pubkey', '') }}
+        {%- endfor %}
+{% endif %}
 {% endif %}
 
 {% if 'ssh_auth' in user %}
