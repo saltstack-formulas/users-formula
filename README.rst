@@ -46,3 +46,8 @@ True in pillar per user. Defaults to False
 Ensures the vimrc file exists in the users home directory. Set manage_vimrc:
 True in pillar per user. Defaults to False
 This depends on the vim-formula to be installed
+
+``users.user_files``
+---------------
+
+Permits the abitrary management of files. See pillar.example for configuration details.
