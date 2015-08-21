@@ -15,7 +15,7 @@
 {%- if 'google_auth' in user %}
 {%- do used_googleauth.append(1) %}
 {%- endif %}
-{%- if pillar.get('users:' + name + ':user_files:enabled', False) %}
+{%- if salt['pillar.get']('users:' ~ name ~ ':user_files:enabled', False) %}
 {%- do used_user_files.append(1) %}
 {%- endif %}
 {%- endfor %}
