@@ -173,9 +173,9 @@ users_authorized_keys_{{ name }}:
         {% endfor -%}
 {% else %}
     - contents: |
-      {%- for key_name, pillar_name in user['ssh_auth_pillar'].items() %}
-      {{ salt['pillar.get'](pillar_name + ':' + key_name + ':pubkey', '') }}
-      {%- endfor %}
+        {%- for key_name, pillar_name in user['ssh_auth_pillar'].iteritems() %}
+        {{ salt['pillar.get'](pillar_name + ':' + key_name + ':pubkey', '') }}
+        {%- endfor %}
 {% endif %}
 {% endif %}
 
