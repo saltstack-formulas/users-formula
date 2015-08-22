@@ -84,6 +84,13 @@ users:
         44444444
         55555555
 
+    user_files:
+      enabled: True
+      # 'source' allows you to define an arbitrary directory to sync, useful to use for default files.
+      # should be a salt fileserver path either with or without 'salt://'
+      # if not present, it defaults to 'salt://users/files/user/<username>
+      source: users/files/default
+
   ## Absent user
   cuser:
     absent: True

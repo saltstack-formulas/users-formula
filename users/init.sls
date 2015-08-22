@@ -2,6 +2,7 @@
 {% from "users/map.jinja" import users with context %}
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
+{% set used_user_files = [] %}
 
 {%- for name, user in pillar.get('users', {}).items()
         if user.absent is not defined or not user.absent %}
@@ -14,15 +15,21 @@
 {%- if 'google_auth' in user %}
 {%- do used_googleauth.append(1) %}
 {%- endif %}
+{%- if salt['pillar.get']('users:' ~ name ~ ':user_files:enabled', False) %}
+{%- do used_user_files.append(1) %}
+{%- endif %}
 {%- endfor %}
 
-{%- if used_sudo or used_googleauth %}
+{%- if used_sudo or used_googleauth or used_user_files %}
 include:
 {%- if used_sudo %}
   - users.sudo
 {%- endif %}
 {%- if used_googleauth %}
   - users.googleauth
+{%- endif %}
+{%- if used_user_files %}
+  - users.user_files
 {%- endif %}
 {%- endif %}
 
