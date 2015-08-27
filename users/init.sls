@@ -274,6 +274,36 @@ users_ssh_config_{{ name }}:
         {% endfor -%}
 {% endif %}
 
+{% if 'ssh_known_hosts' in user %}
+{% for hostname, host in user['ssh_known_hosts'].items() %}
+users_ssh_known_hosts_{{ name }}_{{ loop.index0 }}:
+  ssh_known_hosts.present:
+    - user: {{ name }}
+    - name: {{ hostname }}
+    {% if 'port' in host %}
+    - port: {{ host['port'] }}
+    {% endif -%}
+    {% if 'fingerprint' in host %}
+    - fingerprint: {{ host['fingerprint'] }}
+    {% endif -%}
+    {% if 'key' in host %}
+    - key: {{ host['key'] }}
+    {% endif -%}
+    {% if 'enc' in host %}
+    - enc: {{ host['enc'] }}
+    {% endif -%}
+{% endfor %}
+{% endif %}
+
+{% if 'ssh_known_hosts.absent' in user %}
+{% for host in user['ssh_known_hosts.absent'] %}
+users_ssh_known_hosts_delete_{{ name }}_{{ loop.index0 }}:
+  ssh_known_hosts.absent:
+    - user: {{ name }}
+    - name: {{ host }}
+{% endfor %}
+{% endif %}
+
 {% if 'sudouser' in user and user['sudouser'] %}
 
 users_sudoer-{{ name }}:
