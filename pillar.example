@@ -59,6 +59,11 @@ users:
     ssh_auth_sources:
       - salt://keys/buser.id_rsa.pub
     # Manage the ~/.ssh/config file
+    ssh_known_hosts:
+      importanthost:
+        fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+    ssh_known_hosts.absent:
+      - notimportanthost
     ssh_config:
       all:
         hostname: "*"
