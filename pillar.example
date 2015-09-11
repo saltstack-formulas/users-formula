@@ -75,6 +75,11 @@ users:
         options:
           - "StrictHostKeyChecking yes"
 
+    gitconfig:
+      user.name: B User
+      user.email: buser@example.com
+      url."https://".insteadOf: "git://"
+
     google_2fa: True
     google_auth:
       ssh: |
