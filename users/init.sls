@@ -95,6 +95,15 @@ users_{{ name }}_user:
     {% if 'fullname' in user %}
     - fullname: {{ user['fullname'] }}
     {% endif -%}
+    {% if 'roomnumber' in user %}
+    - roomnumber: {{ user['roomnumber'] }}
+    {% endif %}
+    {% if 'workphone' in user %}
+    - workphone: {{ user['workphone'] }}
+    {% endif %}
+    {% if 'homephone' in user %}
+    - homephone: {{ user['workphone'] }}
+    {% endif %}
     {% if not user.get('createhome', True) %}
     - createhome: False
     {% endif %}

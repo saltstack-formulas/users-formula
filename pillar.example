@@ -10,6 +10,9 @@ users:
     enforce_password: True
     home: /custom/buser
     createhome: True
+    roomnumber: "A-1"
+    workphone: "(555) 555-5555"
+    homephone: "(555) 555-5551"
     manage_vimrc: False
     manage_bashrc: False
     manage_profile: False
