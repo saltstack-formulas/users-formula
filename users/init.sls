@@ -325,6 +325,7 @@ users_sudoer-{{ name }}:
     - group: {{ users.root_group }}
     - mode: '0440'
 {% if 'sudo_rules' in user or 'sudo_defaults' in user %}
+#{#%
 {% if 'sudo_rules' in user %}
 {% for rule in user['sudo_rules'] %}
 "validate {{ name }} sudo rule {{ loop.index0 }} {{ name }} {{ rule }}":
@@ -353,6 +354,7 @@ users_sudoer-{{ name }}:
       - file: users_{{ users.sudoers_dir }}/{{ name }}
 {% endfor %}
 {% endif %}
+#%#}
 
 users_{{ users.sudoers_dir }}/{{ name }}:
   file.managed:
@@ -371,6 +373,10 @@ users_{{ users.sudoers_dir }}/{{ name }}:
     - require:
       - file: users_sudoer-defaults
       - file: users_sudoer-{{ name }}
+  cmd.wait:                                                                           
+    - name: visudo -cf {{ users.sudoers_dir }}/{{ name }} || ( rm -rvf {{ users.sudoers_dir }}/{{ name }}; exit 1 )
+    - watch:                                                                         
+      - file: {{ users.sudoers_dir }}/{{ name }}   
 {% endif %}
 {% else %}
 users_{{ users.sudoers_dir }}/{{ name }}:
