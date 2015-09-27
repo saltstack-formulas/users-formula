@@ -78,10 +78,10 @@ users_{{ name }}_user:
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
     {% endif -%}
-    {% if 'password in user -%}
+    {% if 'password' in user -%}
     - password: '{{ user['password'] }}'
     {% endif -%}
-    {% if empty_password is defined -%}
+    {% if 'empty_password' in user -%}
     - empty_password: {{ user['empty_password'] }}
     {% endif -%}
     {% if 'enforce_password' in user -%}
