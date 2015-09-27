@@ -8,6 +8,9 @@ users:
     fullname: B User
     password: $6$w.............
     enforce_password: True
+    # WARNING: If 'empty_password' is set to True, the 'password' statement
+    # will be ignored by enabling password-less login for the user.
+    empty_password: False
     home: /custom/buser
     createhome: True
     roomnumber: "A-1"
