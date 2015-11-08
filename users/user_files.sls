@@ -28,7 +28,7 @@ include:
 {%- if not skip_user %}
 users_userfiles_{{ username }}_recursive:
   file.recurse:
-    - name: {{ user.home }}
+    - name: {{ salt['pillar.get']( username ~ 'user:home', '/home/' ~ username )}}
     - source: {{ file_source }}
     - user: {{ username }}
     - group: {{ user_group }}
