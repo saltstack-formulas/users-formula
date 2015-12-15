@@ -195,7 +195,7 @@ users_authorized_keys_{{ name }}:
   file.managed:
     - name: {{ home }}/.ssh/authorized_keys
     - user: {{ name }}
-    - group: {{ name }}
+    - group: {{ user_group }}
     - mode: 600
 {% if 'ssh_auth_file' in user %}
     - contents: |
