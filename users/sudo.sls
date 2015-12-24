@@ -6,16 +6,10 @@ users_bash-package:
   pkg.installed:
     - name: {{ users.bash_package }}
 
-users_sudo-group:
-  group.present:
-    - name: sudo
-    - system: True
-
 users_sudo-package:
   pkg.installed:
     - name: {{ users.sudo_package }}
     - require:
-      - group: users_sudo-group
       - file: {{ users.sudoers_dir }} 
 
 users_{{ users.sudoers_dir }}:
