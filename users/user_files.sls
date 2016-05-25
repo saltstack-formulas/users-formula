@@ -7,7 +7,6 @@ include:
 {%- for username, user in salt['pillar.get']('users', {}).items() if (user.absent is not defined or not user.absent) -%}
 {%- set user_files = salt['pillar.get'](('users:' ~ username ~ ':user_files'), {'enabled': False}) -%}
 {%- set user_group = salt['pillar.get'](('users:' ~ username ~ ':prime_group:name'), username) -%}
-{%- set home = user.get('home', "/home/%s" % username) -%}
 {%- if user_files.enabled -%}
 
 {%- if user_files.source is defined -%}
@@ -29,7 +28,7 @@ include:
 {%- if not skip_user %}
 users_userfiles_{{ username }}_recursive:
   file.recurse:
-    - name: {{ home }}
+    - name: {{ user.home }}
     - source: {{ file_source }}
     - user: {{ username }}
     - group: {{ user_group }}
