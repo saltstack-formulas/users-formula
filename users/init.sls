@@ -141,6 +141,7 @@ users_{{ name }}_user:
   {% if 'ssh_keys' in user or
       'ssh_auth' in user or
       'ssh_auth_file' in user or
+      'ssh_auth_pillar' in user or
       'ssh_auth.absent' in user or
       'ssh_config' in user %}
 user_keydir_{{ name }}:
