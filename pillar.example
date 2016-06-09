@@ -81,6 +81,9 @@ users:
         options:
           - "StrictHostKeyChecking yes"
 
+    # Using gitconfig without Git installed will result in an error
+    # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.git.html:
+    # This state module now requires git 1.6.5 (released 10 October 2009) or newer.
     gitconfig:
       user.name: B User
       user.email: buser@example.com
