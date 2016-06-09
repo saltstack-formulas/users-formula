@@ -416,6 +416,11 @@ users_googleauth-{{ svc }}-{{ name }}:
 {%- endif %}
 
 {% if 'gitconfig' in user %}
+{% if not salt['cmd.has_exec']('git') %}
+skip_{{ name }}_gitconfig_since_git_not_installed:
+  test.fail_without_changes:
+    - name: "Git configuration for user {{ name }} has been skipped because Git is not installed."
+{% else %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
   {% if grains['saltversioninfo'] >= (2015, 8, 0, 0) %}
@@ -432,6 +437,7 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     - is_global: True
     {% endif %}
 {% endfor %}
+{% endif %}
 {% endif %}
 
 {% endfor %}
