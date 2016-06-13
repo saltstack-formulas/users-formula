@@ -12,6 +12,8 @@ users:
     # will be ignored by enabling password-less login for the user.
     empty_password: False
     home: /custom/buser
+    homedir_owner: buser
+    homedir_group: primarygroup
     createhome: True
     roomnumber: "A-1"
     workphone: "(555) 555-5555"
