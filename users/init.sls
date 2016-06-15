@@ -218,7 +218,7 @@ users_ssh_auth_{{ name }}_{{ loop.index0 }}:
     - user: {{ name }}
     - name: {{ auth }}
     - require:
-        - file: users_{{ name }}_user
+        - file: user_keydir_{{ name }}
         - user: users_{{ name }}_user
 {% endfor %}
 {% endif %}
