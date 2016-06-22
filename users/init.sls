@@ -73,6 +73,9 @@ users_{{ name }}_user:
     {%- elif 'uid' in user %}
     - gid: {{ user['uid'] }}
     {%- endif %}
+    {% if 'system' in user and user['system'] %}
+    - system: True
+    {% endif %}
   user.present:
     - name: {{ name }}
     - home: {{ home }}
