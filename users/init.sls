@@ -48,11 +48,9 @@ include:
 
 {% for group in user.get('groups', []) %}
 users_{{ name }}_{{ group }}_group:
-  group.present:
+  group:
     - name: {{ group }}
-    {% if group == 'sudo' %}
-    - system: True
-    {% endif %}
+    - present
 {% endfor %}
 
 users_{{ name }}_user:
@@ -113,17 +111,7 @@ users_{{ name }}_user:
     - createhome: False
     {% endif %}
     {% if 'expire' in user -%}
-        {% if grains['kernel'].endswith('BSD') and
-            user['expire'] < 157766400 %}
-        {# 157762800s since epoch equals 01 Jan 1975 00:00:00 UTC #}
-    - expire: {{ user['expire'] * 86400 }}
-        {% elif grains['kernel'] == 'Linux' and
-            user['expire'] > 84006 %}
-        {# 2932896 days since epoch equals 9999-12-31 #}
-    - expire: {{ (user['expire'] / 86400) | int}}
-        {% else %}
     - expire: {{ user['expire'] }}
-        {% endif %}
     {% endif -%}
     - remove_groups: {{ user.get('remove_groups', 'False') }}
     - groups:
@@ -141,7 +129,6 @@ users_{{ name }}_user:
   {% if 'ssh_keys' in user or
       'ssh_auth' in user or
       'ssh_auth_file' in user or
-      'ssh_auth_pillar' in user or
       'ssh_auth.absent' in user or
       'ssh_config' in user %}
 user_keydir_{{ name }}:
@@ -196,7 +183,7 @@ users_authorized_keys_{{ name }}:
   file.managed:
     - name: {{ home }}/.ssh/authorized_keys
     - user: {{ name }}
-    - group: {{ user_group }}
+    - group: {{ name }}
     - mode: 600
 {% if 'ssh_auth_file' in user %}
     - contents: |
@@ -263,7 +250,7 @@ users_ssh_auth_source_{{ name }}_{{ loop.index0 }}:
     - user: {{ name }}
     - source: {{ pubkey_file }}
     - require:
-        - file: users_{{ name }}_user
+        - file: user_keydir_{{ name }}
         - user: users_{{ name }}_user
 {% endfor %}
 {% endif %}
@@ -389,10 +376,10 @@ users_{{ users.sudoers_dir }}/{{ name }}:
     - require:
       - file: users_sudoer-defaults
       - file: users_sudoer-{{ name }}
-  cmd.wait:                                                                           
+  cmd.wait:
     - name: visudo -cf {{ users.sudoers_dir }}/{{ name }} || ( rm -rvf {{ users.sudoers_dir }}/{{ name }}; exit 1 )
-    - watch:                                                                         
-      - file: {{ users.sudoers_dir }}/{{ name }}   
+    - watch:
+      - file: {{ users.sudoers_dir }}/{{ name }}
 {% endif %}
 {% else %}
 users_{{ users.sudoers_dir }}/{{ name }}:
@@ -416,11 +403,6 @@ users_googleauth-{{ svc }}-{{ name }}:
 {%- endif %}
 
 {% if 'gitconfig' in user %}
-{% if not salt['cmd.has_exec']('git') %}
-skip_{{ name }}_gitconfig_since_git_not_installed:
-  test.fail_without_changes:
-    - name: "Git configuration for user {{ name }} has been skipped because Git is not installed."
-{% else %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
   {% if grains['saltversioninfo'] >= (2015, 8, 0, 0) %}
@@ -437,7 +419,6 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     - is_global: True
     {% endif %}
 {% endfor %}
-{% endif %}
 {% endif %}
 
 {% endfor %}
