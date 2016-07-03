@@ -11,7 +11,9 @@ users:
     # WARNING: If 'empty_password' is set to True, the 'password' statement
     # will be ignored by enabling password-less login for the user.
     empty_password: False
+    system: False
     home: /custom/buser
+    user_dir_mode: 750
     createhome: True
     roomnumber: "A-1"
     workphone: "(555) 555-5555"
@@ -34,6 +36,7 @@ users:
     sudo_defaults:
       - '!requiretty'
     shell: /bin/bash
+    remove_groups: False
     prime_group:
       name: primarygroup
       gid: 500
