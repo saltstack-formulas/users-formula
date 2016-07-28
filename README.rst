@@ -19,7 +19,7 @@ Available states
 ``users``
 ---------
 
-Configure a user's home directory, group, the user itself, secondary groups,
+Configures a user's home directory, group, the user itself, secondary groups,
 and associated keys. Also configures sudo access, and absent users.
 
 ``users.sudo``
@@ -31,21 +31,21 @@ is configured.
 ``users.bashrc``
 ----------------
 
-Ensures the bashrc file exists in the users home directory. Set manage_bashrc:
-True in pillar per user. Defaults to False
+Ensures the bashrc file exists in the users home directory. Sets 'manage_bashrc:
+True' in pillar per user. Defaults to False.
 
 ``users.profile``
 ----------------
 
-Ensures the profile file exists in the users home directory. Set manage_profile:
-True in pillar per user. Defaults to False
+Ensures the profile file exists in the users home directory. Sets 'manage_profile:
+True' in pillar per user. Defaults to False.
 
 ``users.vimrc``
 ---------------
 
-Ensures the vimrc file exists in the users home directory. Set manage_vimrc:
-True in pillar per user. Defaults to False
-This depends on the vim-formula to be installed
+Ensures the vimrc file exists in the users home directory. Sets 'manage_vimrc:
+True' in pillar per user. Defaults to False.
+This depends on the vim-formula to be installed.
 
 ``users.user_files``
 ---------------
