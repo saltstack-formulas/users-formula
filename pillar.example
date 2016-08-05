@@ -42,6 +42,9 @@ users:
       gid: 500
     groups:
       - users
+    optional_groups:
+      - some_groups_that_might
+      - not_exist_on_all_minions
     ssh_key_type: rsa
     # You can inline the private keys ...
     ssh_keys:
