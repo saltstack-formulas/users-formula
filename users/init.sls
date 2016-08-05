@@ -135,6 +135,12 @@ users_{{ name }}_user:
       {% for group in user.get('groups', []) -%}
       - {{ group }}
       {% endfor %}
+    {% if 'optional_groups' in user %}
+    - optional_groups:
+      {% for optional_group in user['optional_groups'] -%}
+      - {{optional_group}}
+      {% endfor %}
+    {% endif %}
     - require:
       - group: {{ user_group }}
       {% for group in user.get('groups', []) -%}
