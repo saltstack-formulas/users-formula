@@ -341,6 +341,7 @@ users_ssh_known_hosts_delete_{{ name }}_{{ loop.index0 }}:
 
 users_sudoer-{{ name }}:
   file.managed:
+    - replace: False
     - name: {{ users.sudoers_dir }}/{{ name }}
     - user: root
     - group: {{ users.root_group }}
@@ -379,6 +380,7 @@ users_sudoer-{{ name }}:
 
 users_{{ users.sudoers_dir }}/{{ name }}:
   file.managed:
+    - replace: True
     - name: {{ users.sudoers_dir }}/{{ name }}
     - contents: |
       {%- if 'sudo_defaults' in user %}
