@@ -170,34 +170,43 @@ user_keydir_{{ name }}:
   {% endif %}
 
   {% if 'ssh_keys' in user %}
-  {% set key_type = 'id_' + user.get('ssh_key_type', 'rsa') %}
-users_user_{{ name }}_private_key:
+    {% for _key in user.ssh_keys.keys() %}
+      {% if _key == 'privkey' %}
+        {% set key_name = 'id_' + user.get('ssh_key_type', 'rsa') %}
+      {% elif _key ==  'pubkey' %}
+        {% set key_name = 'id_' + user.get('ssh_key_type', 'rsa') + '.pub' %}
+      {% else %}
+        {% set key_name = _key %}
+      {% endif %}
+users_{{ name }}_{{ key_name }}_private_key:
   file.managed:
-    - name: {{ home }}/.ssh/{{ key_type }}
+    - name: {{ home }}/.ssh/{{ key_name }}
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
     - show_diff: False
-    - contents_pillar: users:{{ name }}:ssh_keys:privkey
+    - contents_pillar: users:{{ name }}:ssh_keys:{{ _key }}
     - require:
       - user: users_{{ name }}_user
       {% for group in user.get('groups', []) %}
       - group: users_{{ name }}_{{ group }}_group
       {% endfor %}
-users_user_{{ name }}_public_key:
+users_{{ name }}_{{ key_name }}_public_key:
   file.managed:
-    - name: {{ home }}/.ssh/{{ key_type }}.pub
+    - name: {{ home }}/.ssh/{{ key_name }}
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
     - show_diff: False
-    - contents_pillar: users:{{ name }}:ssh_keys:pubkey
+    - contents_pillar: users:{{ name }}:ssh_keys:{{ _key }}
     - require:
       - user: users_{{ name }}_user
       {% for group in user.get('groups', []) %}
       - group: users_{{ name }}_{{ group }}_group
       {% endfor %}
+    {% endfor %}
   {% endif %}
+
 
 {% if 'ssh_auth_file' in user or 'ssh_auth_pillar' in user %}
 users_authorized_keys_{{ name }}:
