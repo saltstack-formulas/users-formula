@@ -34,20 +34,6 @@ include:
 {%- endif %}
 
 {% for name, user in pillar.get('users', {}).items()
-        if user.absent is not defined or not user.absent %}
-{%- if user == None -%}
-{%- set user = {} -%}
-{%- endif -%}
-{%- set current = salt.user.info(name) -%}
-{%- set home = user.get('home', current.get('home', "/home/%s" % name)) -%}
-
-{%- if 'prime_group' in user and 'name' in user['prime_group'] %}
-{%- set user_group = user.prime_group.name -%}
-{%- else -%}
-{%- set user_group = name -%}
-{%- endif %}
-
-{% for name, user in pillar.get('users', {}).items()
         if user.absent is defined and user.absent %}
 users_absent_user_{{ name }}:
 {% if 'purge' in user or 'force' in user %}
@@ -82,6 +68,20 @@ users_absent_group_{{ group }}:
   group.absent:
     - name: {{ group }}
 {% endfor %}
+
+{% for name, user in pillar.get('users', {}).items()
+        if user.absent is not defined or not user.absent %}
+{%- if user == None -%}
+{%- set user = {} -%}
+{%- endif -%}
+{%- set current = salt.user.info(name) -%}
+{%- set home = user.get('home', current.get('home', "/home/%s" % name)) -%}
+
+{%- if 'prime_group' in user and 'name' in user['prime_group'] %}
+{%- set user_group = user.prime_group.name -%}
+{%- else -%}
+{%- set user_group = name -%}
+{%- endif %}
 
 {% for group in user.get('groups', []) %}
 users_{{ name }}_{{ group }}_group:
