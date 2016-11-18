@@ -34,6 +34,42 @@ include:
 {%- endif %}
 
 {% for name, user in pillar.get('users', {}).items()
+        if user.absent is defined and user.absent %}
+users_absent_user_{{ name }}:
+{% if 'purge' in user or 'force' in user %}
+  user.absent:
+    - name: {{ name }}
+    {% if 'purge' in user %}
+    - purge: {{ user['purge'] }}
+    {% endif %}
+    {% if 'force' in user %}
+    - force: {{ user['force'] }}
+    {% endif %}
+{% else %}
+  user.absent:
+    - name: {{ name }}
+{% endif -%}
+users_{{ users.sudoers_dir }}/{{ name }}:
+  file.absent:
+    - name: {{ users.sudoers_dir }}/{{ name }}
+{% endfor %}
+
+{% for user in pillar.get('absent_users', []) %}
+users_absent_user_2_{{ user }}:
+  user.absent:
+    - name: {{ name }}
+users_2_{{ users.sudoers_dir }}/{{ user }}:
+  file.absent:
+    - name: {{ users.sudoers_dir }}/{{ user }}
+{% endfor %}
+
+{% for group in pillar.get('absent_groups', []) %}
+users_absent_group_{{ group }}:
+  group.absent:
+    - name: {{ group }}
+{% endfor %}
+
+{% for name, user in pillar.get('users', {}).items()
         if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
 {%- set user = {} -%}
@@ -452,41 +488,4 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
 {% endif %}
 {% endif %}
 
-{% endfor %}
-
-
-{% for name, user in pillar.get('users', {}).items()
-        if user.absent is defined and user.absent %}
-users_absent_user_{{ name }}:
-{% if 'purge' in user or 'force' in user %}
-  user.absent:
-    - name: {{ name }}
-    {% if 'purge' in user %}
-    - purge: {{ user['purge'] }}
-    {% endif %}
-    {% if 'force' in user %}
-    - force: {{ user['force'] }}
-    {% endif %}
-{% else %}
-  user.absent:
-    - name: {{ name }}
-{% endif -%}
-users_{{ users.sudoers_dir }}/{{ name }}:
-  file.absent:
-    - name: {{ users.sudoers_dir }}/{{ name }}
-{% endfor %}
-
-{% for user in pillar.get('absent_users', []) %}
-users_absent_user_2_{{ user }}:
-  user.absent:
-    - name: {{ name }}
-users_2_{{ users.sudoers_dir }}/{{ user }}:
-  file.absent:
-    - name: {{ users.sudoers_dir }}/{{ user }}
-{% endfor %}
-
-{% for group in pillar.get('absent_groups', []) %}
-users_absent_group_{{ group }}:
-  group.absent:
-    - name: {{ group }}
 {% endfor %}
