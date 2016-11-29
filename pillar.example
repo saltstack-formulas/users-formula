@@ -13,6 +13,8 @@ users:
     empty_password: False
     system: False
     home: /custom/buser
+    homedir_owner: buser
+    homedir_group: primarygroup
     user_dir_mode: 750
     createhome: True
     roomnumber: "A-1"
