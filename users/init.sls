@@ -479,7 +479,7 @@ users_{{ users.sudoers_dir }}/{{ name }}:
 {% for user in pillar.get('absent_users', []) %}
 users_absent_user_2_{{ user }}:
   user.absent:
-    - name: {{ name }}
+    - name: {{ user }}
 users_2_{{ users.sudoers_dir }}/{{ user }}:
   file.absent:
     - name: {{ users.sudoers_dir }}/{{ user }}
