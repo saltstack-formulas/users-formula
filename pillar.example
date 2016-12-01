@@ -11,6 +11,7 @@ users:
     # WARNING: If 'empty_password' is set to True, the 'password' statement
     # will be ignored by enabling password-less login for the user.
     empty_password: False
+    hash_password: False
     system: False
     home: /custom/buser
     homedir_owner: buser
