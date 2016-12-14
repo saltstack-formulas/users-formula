@@ -60,8 +60,8 @@ users_{{ name }}_user:
   {% if user.get('createhome', True) %}
   file.directory:
     - name: {{ home }}
-    - user: {{ name }}
-    - group: {{ user_group }}
+    - user: {{ user.get('homedir_owner', name) }}
+    - group: {{ user.get('homedir_group', user_group) }}
     - mode: {{ user.get('user_dir_mode', '0750') }}
     - require:
       - user: users_{{ name }}_user
@@ -92,6 +92,9 @@ users_{{ name }}_user:
     {% endif -%}
     {% if 'enforce_password' in user -%}
     - enforce_password: {{ user['enforce_password'] }}
+    {% endif -%}
+    {% if 'hash_password' in user -%}
+    - hash_password: {{ user['hash_password'] }}
     {% endif -%}
     {% if user.get('system', False) -%}
     - system: True
@@ -427,12 +430,20 @@ users_googleauth-{{ svc }}-{{ name }}:
 {%- endfor %}
 {%- endif %}
 
+#
+# if not salt['cmd.has_exec']('git')
+# fails even if git is installed
+#
+# this doesn't work (Salt bug), therefore need to run state.apply twice
+#include:
+#  - users
+#
+#git:
+#  pkg.installed:
+#    - require_in:
+#      - sls: users
+#
 {% if 'gitconfig' in user %}
-{% if not salt['cmd.has_exec']('git') %}
-skip_{{ name }}_gitconfig_since_git_not_installed:
-  test.fail_without_changes:
-    - name: "Git configuration for user {{ name }} has been skipped because Git is not installed."
-{% else %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
   {% if grains['saltversioninfo'] >= (2015, 8, 0, 0) %}
@@ -449,7 +460,6 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     - is_global: True
     {% endif %}
 {% endfor %}
-{% endif %}
 {% endif %}
 
 {% endfor %}
@@ -479,7 +489,7 @@ users_{{ users.sudoers_dir }}/{{ name }}:
 {% for user in pillar.get('absent_users', []) %}
 users_absent_user_2_{{ user }}:
   user.absent:
-    - name: {{ name }}
+    - name: {{ user }}
 users_2_{{ users.sudoers_dir }}/{{ user }}:
   file.absent:
     - name: {{ users.sudoers_dir }}/{{ user }}
