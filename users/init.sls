@@ -415,6 +415,27 @@ users_{{ users.sudoers_dir }}/{{ name }}:
     - name: {{ users.sudoers_dir }}/{{ name }}
 {% endif %}
 
+# Policykit AdminIdentities Logik
+{%- if 'polkitadmin' in user and user['polkitadmin'] %}
+users_{{ users.polkit_dir }}/{{ name }}:
+  file.managed:
+    - replace: True
+    - onlyif: 'test -d {{ users.polkit_dir }}'
+    - name: {{ users.polkit_dir }}/{{ name }}.conf
+    - contents: |
+        ########################################################################
+        # File managed by Salt (users-formula).
+        # Your changes will be overwritten.
+        ########################################################################
+        #
+        [Configuration]
+        AdminIdentities=unix-user:{{ name }}
+{%- else %}
+users_{{ users.polkit_dir }}/{{ name }}:
+  file.absent:
+    - name: {{ users.polkit_dir }}/{{ name }}.conf
+{%- endif %}
+
 {%- if 'google_auth' in user %}
 {%- for svc in user['google_auth'] %}
 users_googleauth-{{ svc }}-{{ name }}:
@@ -484,6 +505,9 @@ users_absent_user_{{ name }}:
 users_{{ users.sudoers_dir }}/{{ name }}:
   file.absent:
     - name: {{ users.sudoers_dir }}/{{ name }}
+users_{{ users.polkit_dir }}/{{ name }}:
+  file.absent:
+    - name: {{ users.polkit_dir }}/{{ name }}.conf
 {% endfor %}
 
 {% for user in pillar.get('absent_users', []) %}
@@ -493,6 +517,9 @@ users_absent_user_2_{{ user }}:
 users_2_{{ users.sudoers_dir }}/{{ user }}:
   file.absent:
     - name: {{ users.sudoers_dir }}/{{ user }}
+users_2_{{ users.polkit_dir }}/{{ name }}:
+  file.absent:
+    - name: {{ users.polkit_dir }}/{{ name }}.conf
 {% endfor %}
 
 {% for group in pillar.get('absent_groups', []) %}
