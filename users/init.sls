@@ -22,7 +22,6 @@
 
 {%- if used_sudo or used_googleauth or used_user_files %}
 include:
-  - users.polkit
 {%- if used_sudo %}
   - users.sudo
 {%- endif %}
@@ -33,6 +32,7 @@ include:
   - users.user_files
 {%- endif %}
 {%- endif %}
+  - users.polkit
 
 {% for name, user in pillar.get('users', {}).items()
         if user.absent is not defined or not user.absent %}
