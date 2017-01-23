@@ -24,7 +24,7 @@ users_{{ users.polkit_dir }}/99salt-users-formula.conf:
         ########################################################################
         #
         [Configuration]
-        AdminIdentities={{ polkitusers.value }}
+        AdminIdentities={{ users.polkit_defaults }}{{ polkitusers.value }}
 {% else %}
 users_{{ users.polkit_dir }}/99salt-users-formula.conf_delete:
   file.absent:
