@@ -101,6 +101,8 @@ users_{{ name }}_user:
     {% endif -%}
     {% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
     - gid: {{ user['prime_group']['gid'] }}
+    {% elif 'prime_group' in user and 'name' in user['prime_group']%}
+    - gid: {{ user['prime_group']['name'] }}
     {% else -%}
     - gid_from_name: True
     {% endif -%}
