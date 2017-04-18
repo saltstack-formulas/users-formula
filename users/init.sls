@@ -4,6 +4,16 @@
 {% set used_googleauth = [] %}
 {% set used_user_files = [] %}
 
+{% for group, setting in salt['pillar.get']('groups', {}).iteritems() %}
+users_group_{{ setting.get('state', "present") }}_{{ group }}:
+  group.{{ setting.get('state', "present") }}:
+    - name: {{ group }}
+    {%- if setting.get('gid') %}
+    - gid: {{setting.get('gid')  }}
+    {%- endif %}
+    - system: {{ setting.get('system',"False") }}
+{% endfor %}
+
 {%- for name, user in pillar.get('users', {}).items()
         if user.absent is not defined or not user.absent %}
 {%- if user == None -%}
