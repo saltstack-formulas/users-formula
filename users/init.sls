@@ -89,7 +89,9 @@ users_{{ name }}_user:
     {% endif %}
   user.present:
     - name: {{ name }}
+    {% if user.get('createhome', True) -%}
     - home: {{ home }}
+    {% endif -%}
     - shell: {{ user.get('shell', current.get('shell', users.get('shell', '/bin/bash'))) }}
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
