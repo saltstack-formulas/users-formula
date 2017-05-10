@@ -38,6 +38,8 @@ users:
       - ALL=(otheruser) /usr/bin/script.sh
     sudo_defaults:
       - '!requiretty'
+    # enable polkitadmin to make user an AdminIdentity for polkit
+    polkitadmin: True
     shell: /bin/bash
     remove_groups: False
     prime_group:
