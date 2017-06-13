@@ -73,6 +73,8 @@ users:
     # than inline in pillar, this works.
     ssh_auth_sources:
       - salt://keys/buser.id_rsa.pub
+    ssh_auth_sources.absent:
+      - salt://keys/deleteduser.id_rsa.pub # PUBLICKEY_FILE_TO_BE_REMOVED
     # Manage the ~/.ssh/config file
     ssh_known_hosts:
       importanthost:
