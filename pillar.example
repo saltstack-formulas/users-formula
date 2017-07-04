@@ -1,4 +1,7 @@
 users:
+  _lookup:
+    root_group: root
+
   ## Minimal required pillar values
   auser:
     fullname: A User
