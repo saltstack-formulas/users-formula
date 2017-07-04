@@ -5,7 +5,7 @@
 {% set used_user_files = [] %}
 
 {%- for name, user in pillar.get('users', {}).items()
-        if user.absent is not defined or not user.absent %}
+        if (user.absent is not defined or not user.absent) and not name == '_lookup' %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -34,7 +34,7 @@ include:
 {%- endif %}
 
 {% for name, user in pillar.get('users', {}).items()
-        if user.absent is not defined or not user.absent %}
+        if (user.absent is not defined or not user.absent) and not name == '_lookup' %}
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
@@ -481,7 +481,7 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
 
 
 {% for name, user in pillar.get('users', {}).items()
-        if user.absent is defined and user.absent %}
+        if (user.absent is defined and user.absent) and not name == '_lookup' %}
 users_absent_user_{{ name }}:
 {% if 'purge' in user or 'force' in user %}
   user.absent:
