@@ -354,12 +354,13 @@ users_ssh_known_hosts_delete_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% set sudoers_d_filename = name|replace('.','_') %}
 {% if 'sudouser' in user and user['sudouser'] %}
 
 users_sudoer-{{ name }}:
   file.managed:
     - replace: False
-    - name: {{ users.sudoers_dir }}/{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
     - user: root
     - group: {{ users.root_group }}
     - mode: '0440'
@@ -398,7 +399,7 @@ users_sudoer-{{ name }}:
 users_{{ users.sudoers_dir }}/{{ name }}:
   file.managed:
     - replace: True
-    - name: {{ users.sudoers_dir }}/{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
     - contents: |
       {%- if 'sudo_defaults' in user %}
       {%- for entry in user['sudo_defaults'] %}
@@ -419,14 +420,14 @@ users_{{ users.sudoers_dir }}/{{ name }}:
       - file: users_sudoer-defaults
       - file: users_sudoer-{{ name }}
   cmd.wait:
-    - name: visudo -cf {{ users.sudoers_dir }}/{{ name }} || ( rm -rvf {{ users.sudoers_dir }}/{{ name }}; exit 1 )
+    - name: visudo -cf {{ users.sudoers_dir }}/{{ sudoers_d_filename }} || ( rm -rvf {{ users.sudoers_dir }}/{{ sudoers_d_filename }}; exit 1 )
     - watch:
-      - file: {{ users.sudoers_dir }}/{{ name }}
+      - file: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 {% else %}
-users_{{ users.sudoers_dir }}/{{ name }}:
+users_{{ users.sudoers_dir }}/{{ sudoers_d_filename }}:
   file.absent:
-    - name: {{ users.sudoers_dir }}/{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 
 {%- if 'google_auth' in user %}
