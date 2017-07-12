@@ -57,13 +57,12 @@ Overriding default values
 
 In order to separate actual user account definitions from configuration the pillar `users-formula` was introduced:
 
-```yaml
-users:
-  myuser:
-    # stuff
+.. code-bock:: yaml
+    users:
+      myuser:
+        # stuff
 
-users-formula:
-  lookup:
-    root_group: toor
-    shell: '/bin/zsh'
-```
+    users-formula:
+      lookup:
+        root_group: toor
+        shell: '/bin/zsh'
