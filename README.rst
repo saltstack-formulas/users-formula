@@ -58,6 +58,7 @@ Overriding default values
 In order to separate actual user account definitions from configuration the pillar `users-formula` was introduced:
 
 .. code-bock:: yaml
+
     users:
       myuser:
         # stuff
