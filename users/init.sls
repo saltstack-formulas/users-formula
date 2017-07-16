@@ -280,7 +280,7 @@ users_ssh_auth_source_{{ name }}_{{ loop.index0 }}:
 
 {% if 'ssh_auth_sources.absent' in user %}
 {% for pubkey_file in user['ssh_auth_sources.absent'] %}
-users_ssh_auth_source_{{ name }}_{{ loop.index0 }}:
+users_ssh_auth_source_delete_{{ name }}_{{ loop.index0 }}:
   ssh_auth.absent:
     - user: {{ name }}
     - source: {{ pubkey_file }}
