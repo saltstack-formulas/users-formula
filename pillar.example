@@ -1,3 +1,7 @@
+users-formula:
+  lookup:  # override the defauls in map.jinja
+    root_group: root
+
 users:
   ## Minimal required pillar values
   auser:
