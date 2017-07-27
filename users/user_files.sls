@@ -9,8 +9,8 @@ include:
 {%- set user_files = salt['pillar.get'](('users:' ~ username ~ ':user_files'), {'enabled': False}) -%}
 {%- set user_group = salt['pillar.get'](('users:' ~ username ~ ':prime_group:name'), username) -%}
 {%- set user_home = salt['pillar.get'](('users:' ~ username ~ ':home'), current.get('home', '/home/' ~ username )) -%}
-{%- set user_files_file_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:file_mode'), False) -%}
-{%- set user_files_sym_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:sym_mode'), False) -%}
+{%- set user_files_file_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:file_mode'), None) -%}
+{%- set user_files_sym_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:sym_mode'), None) -%}
 {%- if user_files.enabled -%}
 
 {%- if user_files.source is defined -%}
@@ -37,10 +37,10 @@ users_userfiles_{{ username }}_recursive:
     - user: {{ username }}
     - group: {{ user_group }}
     - clean: False
-    {% if user_files_file_mode -%}
+    {% if user_files_file_mode is not None -%}
     - file_mode: {{ user_files_file_mode }}
     {% endif -%}
-    {% if user_files_sym_mode -%}
+    {% if user_files_sym_mode is not None -%}
     - sym_mode: {{ user_files_sym_mode }}
     {% endif -%}
     - include_empty: True
