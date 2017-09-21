@@ -9,7 +9,7 @@ include:
 {%- set user_files = salt['pillar.get'](('users:' ~ username ~ ':user_files'), {'enabled': False}) -%}
 {%- set user_group = salt['pillar.get'](('users:' ~ username ~ ':prime_group:name'), username) -%}
 {%- set user_home = salt['pillar.get'](('users:' ~ username ~ ':home'), current.get('home', '/home/' ~ username )) -%}
-{%- set template = salt['pillar.get'](('users:' ~ username ~ ':template'), None) -%}
+{%- set template = salt['pillar.get'](('users:' ~ username ~ ':user_files:template'), None) -%}
 {%- if user_files.enabled -%}
 
 {%- if user_files.source is defined -%}
