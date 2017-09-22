@@ -1,3 +1,7 @@
+users-formula:
+  lookup:  # override the defauls in map.jinja
+    root_group: root
+
 users:
   ## Minimal required pillar values
   auser:
@@ -11,8 +15,11 @@ users:
     # WARNING: If 'empty_password' is set to True, the 'password' statement
     # will be ignored by enabling password-less login for the user.
     empty_password: False
+    hash_password: False
     system: False
     home: /custom/buser
+    homedir_owner: buser
+    homedir_group: primarygroup
     user_dir_mode: 750
     createhome: True
     roomnumber: "A-1"
@@ -70,6 +77,8 @@ users:
     # than inline in pillar, this works.
     ssh_auth_sources:
       - salt://keys/buser.id_rsa.pub
+    ssh_auth_sources.absent:
+      - salt://keys/deleteduser.id_rsa.pub # PUBLICKEY_FILE_TO_BE_REMOVED
     # Manage the ~/.ssh/config file
     ssh_known_hosts:
       importanthost:
@@ -93,7 +102,7 @@ users:
     gitconfig:
       user.name: B User
       user.email: buser@example.com
-      url."https://".insteadOf: "git://"
+      "url.https://.insteadOf": "git://"
 
     google_2fa: True
     google_auth:
@@ -117,6 +126,11 @@ users:
       # if not present, it defaults to 'salt://users/files/user/<username>
       source: users/files/default
       template: jinja
+      # You can specify octal mode for files and symlinks that will be copied. Since version 2016.11.0
+      # it's possible to use 'keep' for file_mode, to preserve file original mode, thus you can save
+      # execution bit for example.
+      file_mode: keep
+      sym_mode: 640
 
   ## Absent user
   cuser:

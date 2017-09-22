@@ -21,6 +21,7 @@ users_{{ name }}_user_profile:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
+    - template: jinja
     - source:
       - salt://users/files/profile/{{ name }}/profile
       - salt://users/files/profile/profile

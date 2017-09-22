@@ -33,6 +33,17 @@
     'sudo_package': 'sudo',
     'googleauth_package': 'pam_google_authenticator',
   },
+  'Solaris': {
+    'sudoers_dir': '/opt/local/etc/sudoers.d',
+    'sudoers_file': '/opt/local/etc/sudoers',
+    'googleauth_dir': '/opt/local/etc/google_authenticator.d',
+    'root_group': 'root',
+    'shell': '/bin/bash',
+    'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
+    'googleauth_package': 'libpam-google-authenticator',
+  },
   'default': {
     'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
@@ -44,4 +55,4 @@
     'sudo_package': 'sudo',
     'googleauth_package': 'libpam-google-authenticator',
   },
-}, merge=salt['pillar.get']('users:lookup')) %}
+}, merge=salt['pillar.get']('users-formula:lookup')) %}

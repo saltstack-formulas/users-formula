@@ -60,8 +60,8 @@ users_{{ name }}_user:
   {% if user.get('createhome', True) %}
   file.directory:
     - name: {{ home }}
-    - user: {{ name }}
-    - group: {{ user_group }}
+    - user: {{ user.get('homedir_owner', name) }}
+    - group: {{ user.get('homedir_group', user_group) }}
     - mode: {{ user.get('user_dir_mode', '0750') }}
     - require:
       - user: users_{{ name }}_user
@@ -93,11 +93,16 @@ users_{{ name }}_user:
     {% if 'enforce_password' in user -%}
     - enforce_password: {{ user['enforce_password'] }}
     {% endif -%}
+    {% if 'hash_password' in user -%}
+    - hash_password: {{ user['hash_password'] }}
+    {% endif -%}
     {% if user.get('system', False) -%}
     - system: True
     {% endif -%}
     {% if 'prime_group' in user and 'gid' in user['prime_group'] -%}
     - gid: {{ user['prime_group']['gid'] }}
+    {% elif 'prime_group' in user and 'name' in user['prime_group'] %}
+    - gid: {{ user['prime_group']['name'] }}
     {% else -%}
     - gid_from_name: True
     {% endif -%}
@@ -273,6 +278,18 @@ users_ssh_auth_source_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% if 'ssh_auth_sources.absent' in user %}
+{% for pubkey_file in user['ssh_auth_sources.absent'] %}
+users_ssh_auth_source_delete_{{ name }}_{{ loop.index0 }}:
+  ssh_auth.absent:
+    - user: {{ name }}
+    - source: {{ pubkey_file }}
+    - require:
+        - file: users_{{ name }}_user
+        - user: users_{{ name }}_user
+{% endfor %}
+{% endif %}
+
 {% if 'ssh_auth.absent' in user %}
 {% for auth in user['ssh_auth.absent'] %}
 users_ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
@@ -337,12 +354,13 @@ users_ssh_known_hosts_delete_{{ name }}_{{ loop.index0 }}:
 {% endfor %}
 {% endif %}
 
+{% set sudoers_d_filename = name|replace('.','_') %}
 {% if 'sudouser' in user and user['sudouser'] %}
 
 users_sudoer-{{ name }}:
   file.managed:
     - replace: False
-    - name: {{ users.sudoers_dir }}/{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
     - user: root
     - group: {{ users.root_group }}
     - mode: '0440'
@@ -381,7 +399,7 @@ users_sudoer-{{ name }}:
 users_{{ users.sudoers_dir }}/{{ name }}:
   file.managed:
     - replace: True
-    - name: {{ users.sudoers_dir }}/{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
     - contents: |
       {%- if 'sudo_defaults' in user %}
       {%- for entry in user['sudo_defaults'] %}
@@ -402,14 +420,14 @@ users_{{ users.sudoers_dir }}/{{ name }}:
       - file: users_sudoer-defaults
       - file: users_sudoer-{{ name }}
   cmd.wait:
-    - name: visudo -cf {{ users.sudoers_dir }}/{{ name }} || ( rm -rvf {{ users.sudoers_dir }}/{{ name }}; exit 1 )
+    - name: visudo -cf {{ users.sudoers_dir }}/{{ sudoers_d_filename }} || ( rm -rvf {{ users.sudoers_dir }}/{{ sudoers_d_filename }}; exit 1 )
     - watch:
-      - file: {{ users.sudoers_dir }}/{{ name }}
+      - file: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 {% else %}
-users_{{ users.sudoers_dir }}/{{ name }}:
+users_{{ users.sudoers_dir }}/{{ sudoers_d_filename }}:
   file.absent:
-    - name: {{ users.sudoers_dir }}/{{ name }}
+    - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 
 {%- if 'google_auth' in user %}
@@ -427,12 +445,20 @@ users_googleauth-{{ svc }}-{{ name }}:
 {%- endfor %}
 {%- endif %}
 
+#
+# if not salt['cmd.has_exec']('git')
+# fails even if git is installed
+#
+# this doesn't work (Salt bug), therefore need to run state.apply twice
+#include:
+#  - users
+#
+#git:
+#  pkg.installed:
+#    - require_in:
+#      - sls: users
+#
 {% if 'gitconfig' in user %}
-{% if not salt['cmd.has_exec']('git') %}
-skip_{{ name }}_gitconfig_since_git_not_installed:
-  test.fail_without_changes:
-    - name: "Git configuration for user {{ name }} has been skipped because Git is not installed."
-{% else %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
   {% if grains['saltversioninfo'] >= (2015, 8, 0, 0) %}
@@ -449,7 +475,6 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     - is_global: True
     {% endif %}
 {% endfor %}
-{% endif %}
 {% endif %}
 
 {% endfor %}
@@ -479,7 +504,7 @@ users_{{ users.sudoers_dir }}/{{ name }}:
 {% for user in pillar.get('absent_users', []) %}
 users_absent_user_2_{{ user }}:
   user.absent:
-    - name: {{ name }}
+    - name: {{ user }}
 users_2_{{ users.sudoers_dir }}/{{ user }}:
   file.absent:
     - name: {{ users.sudoers_dir }}/{{ user }}
