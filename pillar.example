@@ -116,6 +116,7 @@ users:
       # should be a salt fileserver path either with or without 'salt://'
       # if not present, it defaults to 'salt://users/files/user/<username>
       source: users/files/default
+      template: jinja
 
   ## Absent user
   cuser:
