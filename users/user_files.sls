@@ -37,9 +37,9 @@ users_userfiles_{{ username }}_recursive:
     - source: {{ file_source }}
     - user: {{ username }}
     - group: {{ user_group }}
-    {%- if user_files_template is not None -%}
+    {% if user_files_template -%}
     - template: {{ user_files_template }}
-    {%- endif -%}
+    {% endif -%}
     - clean: False
     {% if user_files_file_mode -%}
     - file_mode: {{ user_files_file_mode }}
