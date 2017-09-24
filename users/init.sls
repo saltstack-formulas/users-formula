@@ -462,7 +462,7 @@ users_googleauth-{{ svc }}-{{ name }}:
 {% if 'gitconfig' in user %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
-  {% if grains['saltversioninfo'] >= (2015, 8, 0, 0) %}
+  {% if grains['saltversioninfo'] >= [2015, 8, 0, 0] %}
   git.config_set:
   {% else %}
   git.config:
@@ -470,7 +470,7 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     - name: {{ key }}
     - value: "{{ value }}"
     - user: {{ name }}
-    {% if grains['saltversioninfo'] >= (2015, 8, 0, 0) %}
+    {% if grains['saltversioninfo'] >= [2015, 8, 0, 0] %}
     - global: True
     {% else %}
     - is_global: True
