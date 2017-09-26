@@ -178,25 +178,12 @@ user_keydir_{{ name }}:
       {% else %}
         {% set key_name = _key %}
       {% endif %}
-users_{{ name }}_{{ key_name }}_private_key:
+users_{{ name }}_{{ key_name }}_key:
   file.managed:
     - name: {{ home }}/.ssh/{{ key_name }}
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 600
-    - show_diff: False
-    - contents_pillar: users:{{ name }}:ssh_keys:{{ _key }}
-    - require:
-      - user: users_{{ name }}_user
-      {% for group in user.get('groups', []) %}
-      - group: users_{{ name }}_{{ group }}_group
-      {% endfor %}
-users_{{ name }}_{{ key_name }}_public_key:
-  file.managed:
-    - name: {{ home }}/.ssh/{{ key_name }}
-    - user: {{ name }}
-    - group: {{ user_group }}
-    - mode: 644
     - show_diff: False
     - contents_pillar: users:{{ name }}:ssh_keys:{{ _key }}
     - require:
