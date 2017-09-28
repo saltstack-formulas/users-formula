@@ -57,6 +57,10 @@ users:
     ssh_keys:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY
+      # you can provide multiple keys, the keyname is taken as filename
+      # make sure your public keys suffix is .pub
+      foobar: PRIVATEKEY
+      foobar.pub: PUBLICKEY
     # ... or you can pull them from a different pillar,
     # for example one called "ssh_keys":
     ssh_keys_pillar:
