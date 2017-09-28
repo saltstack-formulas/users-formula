@@ -183,7 +183,11 @@ users_{{ name }}_{{ key_name }}_key:
     - name: {{ home }}/.ssh/{{ key_name }}
     - user: {{ name }}
     - group: {{ user_group }}
+      {% if key_name.endswith(".pub") %}
+    - mode: 644
+      {% else %}
     - mode: 600
+      {% endif %}
     - show_diff: False
     - contents_pillar: users:{{ name }}:ssh_keys:{{ _key }}
     - require:
