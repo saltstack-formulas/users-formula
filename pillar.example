@@ -57,6 +57,10 @@ users:
     ssh_keys:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY
+      # you can provide multiple keys, the keyname is taken as filename
+      # make sure your public keys suffix is .pub
+      foobar: PRIVATEKEY
+      foobar.pub: PUBLICKEY
     # ... or you can pull them from a different pillar,
     # for example one called "ssh_keys":
     ssh_keys_pillar:
@@ -125,6 +129,7 @@ users:
       # should be a salt fileserver path either with or without 'salt://'
       # if not present, it defaults to 'salt://users/files/user/<username>
       source: users/files/default
+      template: jinja
       # You can specify octal mode for files and symlinks that will be copied. Since version 2016.11.0
       # it's possible to use 'keep' for file_mode, to preserve file original mode, thus you can save
       # execution bit for example.

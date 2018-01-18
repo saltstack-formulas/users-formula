@@ -9,6 +9,7 @@ include:
 {%- set user_files = salt['pillar.get'](('users:' ~ username ~ ':user_files'), {'enabled': False}) -%}
 {%- set user_group = salt['pillar.get'](('users:' ~ username ~ ':prime_group:name'), username) -%}
 {%- set user_home = salt['pillar.get'](('users:' ~ username ~ ':home'), current.get('home', '/home/' ~ username )) -%}
+{%- set user_files_template = salt['pillar.get'](('users:' ~ username ~ ':user_files:template'), None) -%}
 {%- set user_files_file_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:file_mode'), False) -%}
 {%- set user_files_sym_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:sym_mode'), False) -%}
 {%- if user_files.enabled -%}
@@ -36,6 +37,9 @@ users_userfiles_{{ username }}_recursive:
     - source: {{ file_source }}
     - user: {{ username }}
     - group: {{ user_group }}
+    {% if user_files_template -%}
+    - template: {{ user_files_template }}
+    {% endif -%}
     - clean: False
     {% if user_files_file_mode -%}
     - file_mode: {{ user_files_file_mode }}
