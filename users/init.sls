@@ -194,7 +194,12 @@ users_{{ name }}_{{ key_name }}_key:
     - mode: 600
       {% endif %}
     - show_diff: False
+    {%- set key_value = salt['pillar.get']('users:'+name+':ssh_keys:'+_key) %}
+    {%- if 'salt://' in key_value[:7] %}
+    - source: {{ key_value }}
+    {%- else %}
     - contents_pillar: users:{{ name }}:ssh_keys:{{ _key }}
+    {%- endif %}
     - require:
       - user: users_{{ name }}_user
       {% for group in user.get('groups', []) %}
