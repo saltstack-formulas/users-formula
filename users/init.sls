@@ -446,10 +446,6 @@ users_googleauth-{{ svc }}-{{ name }}:
 {%- endfor %}
 {%- endif %}
 
-#
-# if not salt['cmd.has_exec']('git')
-# fails even if git is installed
-#
 # this doesn't work (Salt bug), therefore need to run state.apply twice
 #include:
 #  - users
@@ -460,6 +456,7 @@ users_googleauth-{{ svc }}-{{ name }}:
 #      - sls: users
 #
 {% if 'gitconfig' in user %}
+{% if salt['cmd.has_exec']('git') %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
   {% if grains['saltversioninfo'] >= [2015, 8, 0, 0] %}
@@ -476,6 +473,7 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     - is_global: True
     {% endif %}
 {% endfor %}
+{% endif %}
 {% endif %}
 
 {% endfor %}
