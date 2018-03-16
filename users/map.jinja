@@ -1,5 +1,16 @@
 # vim: sts=2 ts=2 sw=2 et ai
+
 {% set users = salt['grains.filter_by']({
+  'MacOS': {
+    'sudoers_dir': '/etc/sudoers.d',
+    'sudoers_file': '/etc/sudoers',
+    'googleauth_dir': '/etc/google_authenticator.d',
+    'shell': '/bin/bash',
+    'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
+    'googleauth_package': 'google-authenticator-libpam',
+  },
   'Debian': {
     'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
@@ -56,3 +67,8 @@
     'googleauth_package': 'libpam-google-authenticator',
   },
 }, merge=salt['pillar.get']('users-formula:lookup')) %}
+
+{% if grains.os == 'MacOS' %}
+  {% set group = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
+  {% do users.update({'root_group': group,}) %}
+{% endif %}
