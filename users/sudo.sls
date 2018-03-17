@@ -11,6 +11,7 @@ users_sudo-package:
     - name: {{ users.sudo_package }}
     - require:
       - file: {{ users.sudoers_dir }} 
+    - unless: test "`uname`" = "Darwin"
 
 users_{{ users.sudoers_dir }}:
   file.directory:
