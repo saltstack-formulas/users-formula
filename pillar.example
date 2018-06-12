@@ -57,6 +57,9 @@ users:
     ssh_keys:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY
+      # or you can provide path to key on Salt fileserver
+      privkey: salt://path_to_PRIVATEKEY
+      pubkey: salt://path_to_PUBLICKEY
       # you can provide multiple keys, the keyname is taken as filename
       # make sure your public keys suffix is .pub
       foobar: PRIVATEKEY
