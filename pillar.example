@@ -29,6 +29,9 @@ users:
     manage_bashrc: False
     manage_profile: False
     expire: 16426
+    # Disables user management except sudo rules.
+    # Useful for setting sudo rules for system accounts created by package instalation
+    sudoonly: False
     sudouser: True
     # sudo_rules doesn't need the username as a prefix for the rule
     # this is added automatically by the formula.
@@ -121,6 +124,8 @@ users:
         33333333
         44444444
         55555555
+    # unique: True allows user to have non unique uid
+    unique: False
     uid: 1001
 
     user_files:
