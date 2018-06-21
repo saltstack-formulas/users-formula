@@ -135,6 +135,7 @@ users:
       # execution bit for example.
       file_mode: keep
       sym_mode: 640
+      exclude_pat: "*.gitignore"
 
   ## Absent user
   cuser:
