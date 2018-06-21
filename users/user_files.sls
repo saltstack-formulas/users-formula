@@ -49,7 +49,7 @@ users_userfiles_{{ username }}_recursive:
     - sym_mode: {{ user_files_sym_mode }}
     {% endif -%}
     {% if user_files_exclude_pat -%}
-    - exclude_pat: {{ user_files_exclude_pat }}
+    - exclude_pat: "{{ user_files_exclude_pat }}"
     {% endif -%}
     - include_empty: True
     - keep_symlinks: True
