@@ -12,6 +12,7 @@ include:
 {%- set user_files_template = salt['pillar.get'](('users:' ~ username ~ ':user_files:template'), None) -%}
 {%- set user_files_file_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:file_mode'), False) -%}
 {%- set user_files_sym_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:sym_mode'), False) -%}
+{%- set user_files_exclude_pat = salt['pillar.get'](('users:' ~ username ~ ':user_files:exclude_pat'), False) -%}
 {%- if user_files.enabled -%}
 
 {%- if user_files.source is defined -%}
@@ -46,6 +47,9 @@ users_userfiles_{{ username }}_recursive:
     {% endif -%}
     {% if user_files_sym_mode -%}
     - sym_mode: {{ user_files_sym_mode }}
+    {% endif -%}
+    {% if user_files_exclude_pat -%}
+    - exclude_pat: "{{ user_files_exclude_pat }}"
     {% endif -%}
     - include_empty: True
     - keep_symlinks: True
