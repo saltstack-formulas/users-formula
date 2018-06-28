@@ -9,6 +9,9 @@
 {%- if user == None -%}
 {%- set user = {} -%}
 {%- endif -%}
+{%- if 'sudoonly' in user and user['sudoonly'] %}
+{%- set _dummy=user.update({'sudouser': True}) %}
+{%- endif %}
 {%- if 'sudouser' in user and user['sudouser'] %}
 {%- do used_sudo.append(1) %}
 {%- endif %}
@@ -47,6 +50,7 @@ include:
 {%- set user_group = name -%}
 {%- endif %}
 
+{%- if not ( 'sudoonly' in user and user['sudoonly'] ) %}
 {% for group in user.get('groups', []) %}
 users_{{ name }}_{{ group }}_group:
   group.present:
@@ -121,6 +125,9 @@ users_{{ name }}_user:
     {% endif %}
     {% if not user.get('createhome', True) %}
     - createhome: False
+    {% endif %}
+    {% if not user.get('unique', True) %}
+    - unique: False
     {% endif %}
     {% if 'expire' in user -%}
         {% if grains['kernel'].endswith('BSD') and
@@ -359,6 +366,7 @@ users_ssh_known_hosts_delete_{{ name }}_{{ loop.index0 }}:
     - user: {{ name }}
     - name: {{ host }}
 {% endfor %}
+{% endif %}
 {% endif %}
 
 {% set sudoers_d_filename = name|replace('.','_') %}
