@@ -60,6 +60,16 @@ users_{{ name }}_{{ group }}_group:
     {% endif %}
 {% endfor %}
 
+{# in case home subfolder doesn't exist, create it before the user exists #}
+{% if user.get('createhome', True) %}
+users_{{ name }}_user_prereq:
+  file.directory:
+    - name: {{ home }}
+    - makedirs: True
+    - prereq:
+      - user: users_{{ name }}_user
+{%- endif %}
+
 users_{{ name }}_user:
   {% if user.get('createhome', True) %}
   file.directory:
