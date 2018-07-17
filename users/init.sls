@@ -64,7 +64,7 @@ users_{{ name }}_{{ group }}_group:
 {% if user.get('createhome', True) %}
 users_{{ name }}_user_prereq:
   file.directory:
-    - name: {{ home }}
+    - name: {{ salt['file.dirname'](home) }}
     - makedirs: True
     - prereq:
       - user: users_{{ name }}_user
