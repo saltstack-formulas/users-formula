@@ -1,4 +1,5 @@
 users-formula:
+  use_vim_formula: True
   lookup:  # override the defauls in map.jinja
     root_group: root
 
