@@ -1,5 +1,9 @@
 # vim: sts=2 ts=2 sw=2 et ai
 
+{# import defaults.yaml as defaults #}
+{% import_yaml 'users/defaults.yaml' as defaults %}
+
+{# set Os-family specific settings #}
 {% set users = salt['grains.filter_by'](
   defaults,
   merge=salt['grains.filter_by']({
