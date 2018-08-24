@@ -5,8 +5,7 @@
 {% for name, user in pillar.get('users', {}).items() %}
   {% if user.absent is not defined or not user.absent %}
     {% if 'polkitadmin' in user and user['polkitadmin'] %}
-      {% if polkitusers.update({'value': polkitusers.value + 'unix-user:' + name + ';'}) %}
-      {% endif %}
+      {% do polkitusers.update({'value': polkitusers.value + 'unix-user:' + name + ';'}) %}
     {% endif %}
   {% endif %}
 {% endfor %}
