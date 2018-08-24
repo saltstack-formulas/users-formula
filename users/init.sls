@@ -4,7 +4,7 @@
 {% set used_googleauth = [] %}
 {% set used_user_files = [] %}
 
-{% for group, setting in salt['pillar.get']('groups', {}).iteritems() %}
+{% for group, setting in salt['pillar.get']('groups', {}).items() %}
 users_group_{{ setting.get('state', "present") }}_{{ group }}:
   group.{{ setting.get('state', "present") }}:
     - name: {{ group }}
