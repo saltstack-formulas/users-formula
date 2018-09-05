@@ -115,6 +115,10 @@ users:
       user.email: buser@example.com
       "url.https://.insteadOf": "git://"
 
+    gitconfig.absent:
+      - push.default
+      - color\..+
+
     google_2fa: True
     google_auth:
       ssh: |

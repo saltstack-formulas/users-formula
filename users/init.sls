@@ -491,8 +491,9 @@ users_googleauth-{{ svc }}-{{ name }}:
 #    - require_in:
 #      - sls: users
 #
-{% if 'gitconfig' in user %}
 {% if salt['cmd.has_exec']('git') %}
+
+{% if 'gitconfig' in user %}
 {% for key, value in user['gitconfig'].items() %}
 users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
   {% if grains['saltversioninfo'] >= [2015, 8, 0, 0] %}
@@ -510,6 +511,18 @@ users_{{ name }}_user_gitconfig_{{ loop.index0 }}:
     {% endif %}
 {% endfor %}
 {% endif %}
+
+{% if 'gitconfig.absent' in user and grains['saltversioninfo'] >= [2015, 8, 0, 0] %}
+{% for key in user.get('gitconfig.absent') %}
+users_{{ name }}_user_gitconfig_absent_{{ key }}:
+  git.config_unset:
+    - name: '{{ key }}'
+    - user: {{ name }}
+    - global: True
+    - all: True
+{% endfor %}
+{% endif %}
+
 {% endif %}
 
 {% endfor %}
