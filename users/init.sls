@@ -375,8 +375,14 @@ users_ssh_known_hosts_{{ name }}_{{ loop.index0 }}:
     {% if 'enc' in host %}
     - enc: {{ host['enc'] }}
     {% endif -%}
-    {% if 'hash_hostname' in host %}
-    - hash_hostname: {{ host['hash_hostname'] }}
+    {% if 'hash_known_hosts' in host %}
+    - hash_known_hosts: {{ host['hash_known_hosts'] }}
+    {% endif -%}
+    {% if 'timeout' in host %}
+    - timeout: {{ host['timeout'] }}
+    {% endif -%}
+    {% if 'fingerprint_hash_type' in host %}
+    - fingerprint_hash_type: {{ host['fingerprint_hash_type'] }}
     {% endif -%}
 {% endfor %}
 {% endif %}
