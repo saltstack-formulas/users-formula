@@ -3,7 +3,7 @@
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
 {% set used_user_files = [] %}
-{% set used_polkit = False %}
+{% set used_polkit = [] %}
 
 {%- for name, user in pillar.get('users', {}).items()
         if user.absent is not defined or not user.absent %}
@@ -20,7 +20,7 @@
 {%- do used_user_files.append(1) %}
 {%- endif %}
 {%- if user.get('polkitadmin', False) == True %}
-{%- set used_polkit = True %}
+{%- do used_polkit.append(1)  %}
 {%- endif %}
 {%- endfor %}
 
