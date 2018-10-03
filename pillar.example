@@ -9,6 +9,7 @@ users:
     fullname: A User
 
   ## Full list of pillar values
+  allow_gid_change: False
   buser:
     fullname: B User
     password: $6$w.............
@@ -27,6 +28,7 @@ users:
     workphone: "(555) 555-5555"
     homephone: "(555) 555-5551"
     manage_vimrc: False
+    allow_gid_change: True
     manage_bashrc: False
     manage_profile: False
     expire: 16426

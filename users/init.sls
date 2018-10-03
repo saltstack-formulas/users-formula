@@ -151,6 +151,9 @@ users_{{ name }}_user:
     {% if not user.get('unique', True) %}
     - unique: False
     {% endif %}
+    {%- if grains['saltversioninfo'] >= [2018, 3, 1] %}
+    - allow_gid_change: {{ users.allow_gid_change if 'allow_gid_change' not in user else user['allow_gid_change'] }}
+    {%- endif %}
     {% if 'expire' in user -%}
         {% if grains['kernel'].endswith('BSD') and
             user['expire'] < 157766400 %}
