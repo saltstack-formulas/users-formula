@@ -4,3 +4,6 @@
 users-formula:
   use_vim_formula: False
 
+users:
+  allow_gid_change: True
+
