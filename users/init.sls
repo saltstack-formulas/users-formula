@@ -167,6 +167,18 @@ users_{{ name }}_user:
     - expire: {{ user['expire'] }}
         {% endif %}
     {% endif -%}
+    {% if 'mindays' in user %}
+    - mindays: {{ user.get('mindays', None) }}
+    {% endif %}
+    {% if 'maxdays' in user %}
+    - maxdays: {{ user.get('maxdays', None) }}
+    {% endif %}
+    {% if 'inactdays' in user %}
+    - inactdays: {{ user.get('inactdays', None) }}
+    {% endif %}
+    {% if 'warndays' in user %}
+    - warndays: {{ user.get('warndays', None) }}
+    {% endif %}
     - remove_groups: {{ user.get('remove_groups', 'False') }}
     - groups:
       - {{ user_group }}
