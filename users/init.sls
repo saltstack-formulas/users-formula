@@ -53,7 +53,7 @@ include:
 {%- endif -%}
 {%- set current = salt.user.info(name) -%}
 {%- set home = user.get('home', current.get('home', "/home/%s" % name)) -%}
-{%- set createhome = user.get('createhome', True) -%}
+{%- set createhome = user.get('createhome') -%}
 
 {%- if 'prime_group' in user and 'name' in user['prime_group'] %}
 {%- set user_group = user.prime_group.name -%}
@@ -144,9 +144,7 @@ users_{{ name }}_user:
     {% if 'homephone' in user %}
     - homephone: {{ user['homephone'] }}
     {% endif %}
-    {% if not createhome -%}
-    - createhome: False
-    {% endif %}
+    - createhome: {{ createhome }}
     {% if not user.get('unique', True) %}
     - unique: False
     {% endif %}
