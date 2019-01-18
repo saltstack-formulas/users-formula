@@ -6,4 +6,5 @@ users-formula:
 
 users:
   allow_gid_change: True
+  createhome: True
 

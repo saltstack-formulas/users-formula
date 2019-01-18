@@ -53,6 +53,7 @@ include:
 {%- endif -%}
 {%- set current = salt.user.info(name) -%}
 {%- set home = user.get('home', current.get('home', "/home/%s" % name)) -%}
+{%- set createhome = user.get('createhome') -%}
 
 {%- if 'prime_group' in user and 'name' in user['prime_group'] %}
 {%- set user_group = user.prime_group.name -%}
@@ -71,7 +72,7 @@ users_{{ name }}_{{ group }}_group:
 {% endfor %}
 
 {# in case home subfolder doesn't exist, create it before the user exists #}
-{% if user.get('createhome', True) %}
+{% if createhome -%}
 users_{{ name }}_user_prereq:
   file.directory:
     - name: {{ salt['file.dirname'](home) }}
@@ -81,7 +82,7 @@ users_{{ name }}_user_prereq:
 {%- endif %}
 
 users_{{ name }}_user:
-  {% if user.get('createhome', True) %}
+  {% if createhome -%}
   file.directory:
     - name: {{ home }}
     - user: {{ user.get('homedir_owner', name) }}
@@ -104,9 +105,7 @@ users_{{ name }}_user:
     {% endif %}
   user.present:
     - name: {{ name }}
-    {% if user.get('createhome', True) -%}
     - home: {{ home }}
-    {% endif -%}
     - shell: {{ user.get('shell', current.get('shell', users.get('shell', '/bin/bash'))) }}
     {% if 'uid' in user -%}
     - uid: {{ user['uid'] }}
@@ -145,9 +144,7 @@ users_{{ name }}_user:
     {% if 'homephone' in user %}
     - homephone: {{ user['homephone'] }}
     {% endif %}
-    {% if not user.get('createhome', True) %}
-    - createhome: False
-    {% endif %}
+    - createhome: {{ createhome }}
     {% if not user.get('unique', True) %}
     - unique: False
     {% endif %}
@@ -325,7 +322,9 @@ users_ssh_auth_source_{{ name }}_{{ loop.index0 }}:
     - user: {{ name }}
     - source: {{ pubkey_file }}
     - require:
+        {% if createhome -%}
         - file: users_{{ name }}_user
+        {% endif -%}
         - user: users_{{ name }}_user
 {% endfor %}
 {% endif %}
@@ -337,7 +336,9 @@ users_ssh_auth_source_delete_{{ name }}_{{ loop.index0 }}:
     - user: {{ name }}
     - source: {{ pubkey_file }}
     - require:
+        {% if createhome -%}
         - file: users_{{ name }}_user
+        {% endif -%}
         - user: users_{{ name }}_user
 {% endfor %}
 {% endif %}
@@ -349,7 +350,9 @@ users_ssh_auth_delete_{{ name }}_{{ loop.index0 }}:
     - user: {{ name }}
     - name: {{ auth }}
     - require:
+        {% if createhome -%}
         - file: users_{{ name }}_user
+        {% endif -%}
         - user: users_{{ name }}_user
 {% endfor %}
 {% endif %}
