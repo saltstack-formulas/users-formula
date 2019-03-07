@@ -15,6 +15,9 @@ users_group_present_{{ group }}:
     - name: {{ group }}
     - gid: {{ setting.get('gid') }}
     - system: {{ setting.get('system',"False") }}
+    - members: {{ setting.get('members')|json }}
+    - addusers: {{ setting.get('addusers')|json }}
+    - delusers: {{ setting.get('delusers')|json }}
 {% endif %}
 {% endfor %}
 
