@@ -169,3 +169,10 @@ users:
 absent_users:
   - donald
   - bad_guy
+
+groups:
+  badguys:
+    absent: True
+  niceguys:
+    gid: 4242
+    system: False
