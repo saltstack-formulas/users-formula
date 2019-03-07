@@ -13,7 +13,7 @@ users_group_absent_{{ group }}:
 users_group_present_{{ group }}:
   group.present:
     - name: {{ group }}
-    - gid: {{ setting.get('gid') }}
+    - gid: {{ setting.get('gid', "null") }}
     - system: {{ setting.get('system',"False") }}
     - members: {{ setting.get('members')|json }}
     - addusers: {{ setting.get('addusers')|json }}
