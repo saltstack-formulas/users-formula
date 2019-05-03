@@ -176,3 +176,17 @@ users:
 absent_users:
   - donald
   - bad_guy
+
+groups:
+  badguys:
+    absent: True
+  niceguys:
+    gid: 4242
+    system: False
+    addusers: root
+    delusers: toor
+  ssl-cert:
+    system: True
+    members:
+    - www-data
+    - openldap
