@@ -1,6 +1,14 @@
 users-formula:
+  use_vim_formula: True
   lookup:  # override the defauls in map.jinja
     root_group: root
+
+# group initialization
+groups:
+  foo:
+    state: present
+    gid: 500
+    system: False
 
 users:
   ## Minimal required pillar values
@@ -8,6 +16,7 @@ users:
     fullname: A User
 
   ## Full list of pillar values
+  allow_gid_change: False
   buser:
     fullname: B User
     password: $6$w.............
@@ -26,6 +35,7 @@ users:
     workphone: "(555) 555-5555"
     homephone: "(555) 555-5551"
     manage_vimrc: False
+    allow_gid_change: True
     manage_bashrc: False
     manage_profile: False
     expire: 16426
@@ -92,7 +102,13 @@ users:
     # Manage the ~/.ssh/config file
     ssh_known_hosts:
       importanthost:
+        port: 22
         fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+        key: PUBLICKEY
+        enc: ssh-rsa
+        hash_known_hosts: True
+        timeout: 5
+        fingerprint_hash_type: sha256
     ssh_known_hosts.absent:
       - notimportanthost
     ssh_config:
@@ -113,6 +129,10 @@ users:
       user.name: B User
       user.email: buser@example.com
       "url.https://.insteadOf": "git://"
+
+    gitconfig.absent:
+      - push.default
+      - color\..+
 
     google_2fa: True
     google_auth:
@@ -156,3 +176,17 @@ users:
 absent_users:
   - donald
   - bad_guy
+
+groups:
+  badguys:
+    absent: True
+  niceguys:
+    gid: 4242
+    system: False
+    addusers: root
+    delusers: toor
+  ssl-cert:
+    system: True
+    members:
+    - www-data
+    - openldap
