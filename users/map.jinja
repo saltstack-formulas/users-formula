@@ -89,5 +89,6 @@
 
 {% if grains.os == 'MacOS' %}
   {% set group = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
-  {% do users.update({'root_group': group,}) %}
+  {% do users.update({'root_group': group,
+                      'prime_group': group}) %}
 {% endif %}
