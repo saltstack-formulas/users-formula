@@ -27,7 +27,9 @@
     'bash_package': 'bash',
     'sudo_package': 'sudo',
     'googleauth_package': 'libpam-google-authenticator',
-    },
+    'polkit_dir': '/etc/polkit-1/localauthority.conf.d',
+    'polkit_defaults': 'unix-group:sudo;'
+  },
   'Gentoo': {
     'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
@@ -82,6 +84,8 @@
     'bash_package': 'bash',
     'sudo_package': 'sudo',
     'googleauth_package': 'libpam-google-authenticator',
+    'polkit_dir': '/etc/polkit-1/localauthority.conf.d',
+    'polkit_defaults': 'unix-group:sudo;'
     },
   }, merge=salt['pillar.get']('users-formula:lookup')),
   base='users',
