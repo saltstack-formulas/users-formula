@@ -1,0 +1,10 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+
+users-formula:
+  use_vim_formula: False
+
+users:
+  allow_gid_change: True
+  createhome: True
+

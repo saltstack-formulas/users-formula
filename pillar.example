@@ -1,9 +1,22 @@
+users-formula:
+  use_vim_formula: True
+  lookup:  # override the defauls in map.jinja
+    root_group: root
+
+# group initialization
+groups:
+  foo:
+    state: present
+    gid: 500
+    system: False
+
 users:
   ## Minimal required pillar values
   auser:
     fullname: A User
 
   ## Full list of pillar values
+  allow_gid_change: False
   buser:
     fullname: B User
     password: $6$w.............
@@ -22,9 +35,13 @@ users:
     workphone: "(555) 555-5555"
     homephone: "(555) 555-5551"
     manage_vimrc: False
+    allow_gid_change: True
     manage_bashrc: False
     manage_profile: False
     expire: 16426
+    # Disables user management except sudo rules.
+    # Useful for setting sudo rules for system accounts created by package instalation
+    sudoonly: False
     sudouser: True
     # sudo_rules doesn't need the username as a prefix for the rule
     # this is added automatically by the formula.
@@ -55,6 +72,13 @@ users:
     ssh_keys:
       privkey: PRIVATEKEY
       pubkey: PUBLICKEY
+      # or you can provide path to key on Salt fileserver
+      privkey: salt://path_to_PRIVATEKEY
+      pubkey: salt://path_to_PUBLICKEY
+      # you can provide multiple keys, the keyname is taken as filename
+      # make sure your public keys suffix is .pub
+      foobar: PRIVATEKEY
+      foobar.pub: PUBLICKEY
     # ... or you can pull them from a different pillar,
     # for example one called "ssh_keys":
     ssh_keys_pillar:
@@ -75,10 +99,18 @@ users:
     # than inline in pillar, this works.
     ssh_auth_sources:
       - salt://keys/buser.id_rsa.pub
+    ssh_auth_sources.absent:
+      - salt://keys/deleteduser.id_rsa.pub # PUBLICKEY_FILE_TO_BE_REMOVED
     # Manage the ~/.ssh/config file
     ssh_known_hosts:
       importanthost:
+        port: 22
         fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+        key: PUBLICKEY
+        enc: ssh-rsa
+        hash_known_hosts: True
+        timeout: 5
+        fingerprint_hash_type: sha256
     ssh_known_hosts.absent:
       - notimportanthost
     ssh_config:
@@ -98,7 +130,11 @@ users:
     gitconfig:
       user.name: B User
       user.email: buser@example.com
-      url."https://".insteadOf: "git://"
+      "url.https://.insteadOf": "git://"
+
+    gitconfig.absent:
+      - push.default
+      - color\..+
 
     google_2fa: True
     google_auth:
@@ -113,6 +149,8 @@ users:
         33333333
         44444444
         55555555
+    # unique: True allows user to have non unique uid
+    unique: False
     uid: 1001
 
     user_files:
@@ -121,6 +159,13 @@ users:
       # should be a salt fileserver path either with or without 'salt://'
       # if not present, it defaults to 'salt://users/files/user/<username>
       source: users/files/default
+      template: jinja
+      # You can specify octal mode for files and symlinks that will be copied. Since version 2016.11.0
+      # it's possible to use 'keep' for file_mode, to preserve file original mode, thus you can save
+      # execution bit for example.
+      file_mode: keep
+      sym_mode: 640
+      exclude_pat: "*.gitignore"
 
   ## Absent user
   cuser:
@@ -133,3 +178,17 @@ users:
 absent_users:
   - donald
   - bad_guy
+
+groups:
+  badguys:
+    absent: True
+  niceguys:
+    gid: 4242
+    system: False
+    addusers: root
+    delusers: toor
+  ssl-cert:
+    system: True
+    members:
+    - www-data
+    - openldap

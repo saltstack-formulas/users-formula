@@ -45,9 +45,25 @@ True' in pillar per user. Defaults to False.
 
 Ensures the vimrc file exists in the users home directory. Sets 'manage_vimrc:
 True' in pillar per user. Defaults to False.
-This depends on the vim-formula to be installed.
+This depends on the vim-formula being available and pillar `users:use_vim_formula: True`.
 
 ``users.user_files``
 ---------------
 
 Permits the abitrary management of files. See pillar.example for configuration details.
+
+Overriding default values
+=========================
+
+In order to separate actual user account definitions from configuration the pillar ``users-formula`` was introduced:
+
+.. code-block:: yaml
+
+    users:
+      myuser:
+        # stuff
+
+    users-formula:
+      lookup:
+        root_group: toor
+        shell: '/bin/zsh'

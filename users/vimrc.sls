@@ -1,4 +1,7 @@
 {% from "users/map.jinja" import users with context %}
+
+{% if users.use_vim_formula %}
+
 include:
   - users
   - vim
@@ -22,8 +25,11 @@ users_{{ name }}_user_vimrc:
     - user: {{ name }}
     - group: {{ user_group }}
     - mode: 644
-    - source: 
+    - template: jinja
+    - source:
       - salt://users/files/vimrc/{{ name }}/vimrc
       - salt://users/files/vimrc/vimrc
 {% endif %}
 {% endfor %}
+
+{% endif %}
