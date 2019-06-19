@@ -3,6 +3,7 @@
 {% set used_sudo = [] %}
 {% set used_googleauth = [] %}
 {% set used_user_files = [] %}
+{% set used_polkit = [] %}
 
 {% for group, setting in salt['pillar.get']('groups', {}).items() %}
 {%   if setting.absent is defined and setting.absent or setting.get('state', "present") == 'absent' %}
@@ -38,9 +39,12 @@ users_group_present_{{ group }}:
 {%- if salt['pillar.get']('users:' ~ name ~ ':user_files:enabled', False) %}
 {%- do used_user_files.append(1) %}
 {%- endif %}
+{%- if user.get('polkitadmin', False) == True %}
+{%- do used_polkit.append(1)  %}
+{%- endif %}
 {%- endfor %}
 
-{%- if used_sudo or used_googleauth or used_user_files %}
+{%- if used_sudo or used_googleauth or used_user_files or used_polkit %}
 include:
 {%- if used_sudo %}
   - users.sudo
@@ -50,6 +54,9 @@ include:
 {%- endif %}
 {%- if used_user_files %}
   - users.user_files
+{%- endif %}
+{%- if used_polkit %}
+  - users.polkit
 {%- endif %}
 {%- endif %}
 
