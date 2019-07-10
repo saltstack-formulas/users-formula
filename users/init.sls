@@ -506,8 +506,9 @@ users_{{ users.sudoers_dir }}/{{ sudoers_d_filename }}:
     - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 
-{%- if 'google_auth' in user %}
-{%- for svc in user['google_auth'] %}
+{%- if not grains['os_family'] in ['RedHat', 'Suse'] %}
+{%-   if 'google_auth' in user %}
+{%-     for svc in user['google_auth'] %}
 users_googleauth-{{ svc }}-{{ name }}:
   file.managed:
     - replace: false
@@ -518,7 +519,8 @@ users_googleauth-{{ svc }}-{{ name }}:
     - mode: 400
     - require:
       - pkg: users_googleauth-package
-{%- endfor %}
+{%-     endfor %}
+{%-   endif %}
 {%- endif %}
 
 # this doesn't work (Salt bug), therefore need to run state.apply twice

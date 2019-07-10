@@ -1,0 +1,81 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+stages:
+  - test
+  - commitlint
+  - name: release
+    if: branch = master AND type != pull_request
+
+sudo: required
+cache: bundler
+language: ruby
+dist: xenial
+
+services:
+  - docker
+
+# Make sure the instances listed below match up with
+# the `platforms` defined in `kitchen.yml`
+env:
+  matrix:
+    - INSTANCE: default-debian-10-develop-py3
+    # - INSTANCE: default-ubuntu-1804-develop-py3
+    # - INSTANCE: default-centos-7-develop-py3
+    # - INSTANCE: default-fedora-30-develop-py3
+    # - INSTANCE: default-opensuse-leap-15-develop-py3
+    # - INSTANCE: default-amazonlinux-2-develop-py2
+    # - INSTANCE: default-debian-9-2019-2-py3
+    - INSTANCE: default-ubuntu-1804-2019-2-py3
+    # - INSTANCE: default-centos-7-2019-2-py3
+    # - INSTANCE: default-fedora-30-2019-2-py3
+    # - INSTANCE: default-opensuse-leap-15-2019-2-py3
+    - INSTANCE: default-amazonlinux-2-2019-2-py2
+    # - INSTANCE: default-debian-9-2018-3-py2
+    # - INSTANCE: default-ubuntu-1604-2018-3-py2
+    # - INSTANCE: default-centos-7-2018-3-py2
+    - INSTANCE: default-fedora-29-2018-3-py2
+    - INSTANCE: default-opensuse-leap-15-2018-3-py2
+    # - INSTANCE: default-amazonlinux-2-2018-3-py2
+    # - INSTANCE: default-debian-8-2017-7-py2
+    # - INSTANCE: default-ubuntu-1604-2017-7-py2
+    - INSTANCE: default-centos-6-2017-7-py2
+    # - INSTANCE: default-fedora-29-2017-7-py2
+    # - INSTANCE: default-opensuse-leap-15-2017-7-py2
+    # - INSTANCE: default-amazonlinux-2-2017-7-py2
+
+script:
+  - bin/kitchen verify ${INSTANCE}
+
+jobs:
+  include:
+    # Define the commitlint stage
+    - stage: commitlint
+      language: node_js
+      node_js: lts/*
+      before_install: skip
+      script:
+        - npm install @commitlint/config-conventional -D
+        - npm install @commitlint/travis-cli -D
+        - commitlint-travis
+    # Define the release stage that runs semantic-release
+    - stage: release
+      language: node_js
+      node_js: lts/*
+      before_install: skip
+      script:
+        # Update `AUTHORS.md`
+        - export MAINTAINER_TOKEN=${GH_TOKEN}
+        - go get github.com/myii/maintainer
+        - maintainer contributor
+
+        # Install all dependencies required for `semantic-release`
+        - npm install @semantic-release/changelog@3 -D
+        - npm install @semantic-release/exec@3 -D
+        - npm install @semantic-release/git@7 -D
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script:
+          # Run `semantic-release`
+          - npx semantic-release@15
