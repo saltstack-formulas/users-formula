@@ -67,7 +67,7 @@ include:
 {%- endif -%}
 {%- set current = salt.user.info(name) -%}
 {%- set home = user.get('home', current.get('home', "/home/%s" % name)) -%}
-{%- set createhome = user.get('createhome', current.get('createhome', users.get('createhome'))) -%}
+{%- set createhome = user.get('createhome', users.get('createhome')) -%}
 
 {%- if 'prime_group' in user and 'name' in user['prime_group'] %}
 {%- set user_group = user.prime_group.name -%}
