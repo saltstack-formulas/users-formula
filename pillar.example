@@ -164,6 +164,7 @@ users:
       # it's possible to use 'keep' for file_mode, to preserve file original mode, thus you can save
       # execution bit for example.
       file_mode: keep
+      #dir_mode: 775
       sym_mode: 640
       exclude_pat: "*.gitignore"
 

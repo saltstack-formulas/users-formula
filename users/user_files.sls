@@ -11,6 +11,7 @@ include:
 {%- set user_home = salt['pillar.get'](('users:' ~ username ~ ':home'), current.get('home', '/home/' ~ username )) -%}
 {%- set user_files_template = salt['pillar.get'](('users:' ~ username ~ ':user_files:template'), None) -%}
 {%- set user_files_file_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:file_mode'), False) -%}
+{%- set user_files_dir_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:dir_mode'), False) -%}
 {%- set user_files_sym_mode = salt['pillar.get'](('users:' ~ username ~ ':user_files:sym_mode'), False) -%}
 {%- set user_files_exclude_pat = salt['pillar.get'](('users:' ~ username ~ ':user_files:exclude_pat'), False) -%}
 {%- if user_files.enabled -%}
@@ -44,6 +45,9 @@ users_userfiles_{{ username }}_recursive:
     - clean: False
     {% if user_files_file_mode -%}
     - file_mode: {{ user_files_file_mode }}
+    {% endif -%}
+    {% if user_files_dir_mode -%}
+    - dir_mode: {{ user_files_dir_mode }}
     {% endif -%}
     {% if user_files_sym_mode -%}
     - sym_mode: {{ user_files_sym_mode }}
