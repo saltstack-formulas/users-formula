@@ -164,6 +164,7 @@ users:
       # it's possible to use 'keep' for file_mode, to preserve file original mode, thus you can save
       # execution bit for example.
       file_mode: keep
+      # You can specify octal mode for directories as well. This won't work on Windows minions
       #dir_mode: 775
       sym_mode: 640
       exclude_pat: "*.gitignore"
