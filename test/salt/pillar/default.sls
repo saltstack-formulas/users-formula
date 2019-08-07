@@ -2,7 +2,7 @@
 # vim: ft=yaml
 ---
 users-formula:
-  use_vim_formula: True
+  use_vim_formula: true
   lookup:  # override the defauls in map.jinja
     root_group: root
 
@@ -11,19 +11,22 @@ groups:
   foo:
     state: present
     gid: 1500
-    system: False
+    system: false
   badguys:
-    absent: True
+    absent: true
   niceguys:
     gid: 4242
-    system: False
+    system: false
     addusers: root
     delusers: toor
   ssl-cert:
-    system: True
+    system: true
     members:
-    - www-data
-    - openldap
+      # *TODO*: run groups after all users created and then use `auser` and `buser` instead
+      - root
+      - sshd
+      # - bin
+      # - daemon
 
 users:
   ## Minimal required pillar values
@@ -34,29 +37,29 @@ users:
   buser:
     fullname: B User
     password: $6$w.............
-    enforce_password: True
-    # WARNING: If 'empty_password' is set to True, the 'password' statement
+    enforce_password: true
+    # WARNING: If 'empty_password' is set to true, the 'password' statement
     # will be ignored by enabling password-less login for the user.
-    empty_password: False
-    hash_password: False
-    system: False
+    empty_password: false
+    hash_password: false
+    system: false
     home: /custom/buser
     homedir_owner: buser
     homedir_group: primarygroup
     user_dir_mode: 750
-    createhome: True
+    createhome: true
     roomnumber: "A-1"
     workphone: "(555) 555-5555"
     homephone: "(555) 555-5551"
-    manage_vimrc: False
-    allow_gid_change: False
-    manage_bashrc: False
-    manage_profile: False
+    manage_vimrc: false
+    allow_gid_change: false
+    manage_bashrc: false
+    manage_profile: false
     expire: 16426
     # Disables user management except sudo rules.
     # Useful for setting sudo rules for system accounts created by package instalation
-    sudoonly: False
-    sudouser: True
+    sudoonly: false
+    sudouser: true
     # sudo_rules doesn't need the username as a prefix for the rule
     # this is added automatically by the formula.
     # ----------------------------------------------------------------------
@@ -70,9 +73,9 @@ users:
     sudo_defaults:
       - '!requiretty'
     # enable polkitadmin to make user an AdminIdentity for polkit
-    polkitadmin: True
+    polkitadmin: true
     shell: /bin/bash
-    remove_groups: False
+    remove_groups: false
     prime_group:
       name: primarygroup
       gid: 1501
@@ -82,39 +85,39 @@ users:
       - some_groups_that_might
       - not_exist_on_all_minions
     ssh_key_type: rsa
-    # You can inline the private keys ...
-    ssh_keys:
-      privkey: PRIVATEKEY
-      pubkey: PUBLICKEY
-      # or you can provide path to key on Salt fileserver
-      privkey: salt://path_to_PRIVATEKEY
-      pubkey: salt://path_to_PUBLICKEY
-      # you can provide multiple keys, the keyname is taken as filename
-      # make sure your public keys suffix is .pub
-      foobar: PRIVATEKEY
-      foobar.pub: PUBLICKEY
-    # ... or you can pull them from a different pillar,
-    # for example one called "ssh_keys":
-    ssh_keys_pillar:
-      id_rsa: "ssh_keys"
-      another_key_pair: "ssh_keys"
-    ssh_auth:
-      - PUBLICKEY
-    ssh_auth.absent:
-      - PUBLICKEY_TO_BE_REMOVED
-    # Generates an authorized_keys file for the user
-    # with the given keys
-    ssh_auth_file:
-      - PUBLICKEY
-    # ... or you can pull them from a different pillar similar to ssh_keys_pillar
-    ssh_auth_pillar:
-      id_rsa: "ssh_keys"
-    # If you prefer to keep public keys as files rather
-    # than inline in pillar, this works.
-    ssh_auth_sources:
-      - salt://keys/buser.id_rsa.pub
-    ssh_auth_sources.absent:
-      - salt://keys/deleteduser.id_rsa.pub # PUBLICKEY_FILE_TO_BE_REMOVED
+    # # You can inline the private keys ...
+    # ssh_keys:
+    #   privkey: PRIVATEKEY
+    #   pubkey: PUBLICKEY
+    #   # or you can provide path to key on Salt fileserver
+    #   # privkey: salt://path_to_PRIVATEKEY
+    #   # pubkey: salt://path_to_PUBLICKEY
+    #   # you can provide multiple keys, the keyname is taken as filename
+    #   # make sure your public keys suffix is .pub
+    #   foobar: PRIVATEKEY
+    #   foobar.pub: PUBLICKEY
+    # # ... or you can pull them from a different pillar,
+    # # for example one called "ssh_keys":
+    # ssh_keys_pillar:
+    #   id_rsa: "ssh_keys"
+    #   another_key_pair: "ssh_keys"
+    # ssh_auth:
+    #   - PUBLICKEY
+    # ssh_auth.absent:
+    #   - PUBLICKEY_TO_BE_REMOVED
+    # # Generates an authorized_keys file for the user
+    # # with the given keys
+    # ssh_auth_file:
+    #   - PUBLICKEY
+    # # ... or you can pull them from a different pillar similar to ssh_keys_pillar
+    # ssh_auth_pillar:
+    #   id_rsa: "ssh_keys"
+    # # If you prefer to keep public keys as files rather
+    # # than inline in pillar, this works.
+    # ssh_auth_sources:
+    #   - salt://keys/buser.id_rsa.pub
+    # ssh_auth_sources.absent:
+    #   - salt://keys/deleteduser.id_rsa.pub # PUBLICKEY_FILE_TO_BE_REMOVED
     # Manage the ~/.ssh/config file
     ssh_known_hosts:
       importanthost:
@@ -122,7 +125,7 @@ users:
         fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
         key: PUBLICKEY
         enc: ssh-rsa
-        hash_known_hosts: True
+        hash_known_hosts: true
         timeout: 5
         fingerprint_hash_type: sha256
     ssh_known_hosts.absent:
@@ -150,7 +153,7 @@ users:
       - push.default
       - color\..+
 
-    google_2fa: True
+    google_2fa: true
     google_auth:
       sshd: |
         SOMEGAUTHHASHVAL
@@ -163,12 +166,12 @@ users:
         33333333
         44444444
         55555555
-    # unique: True allows user to have non unique uid
-    unique: False
+    # unique: true allows user to have non unique uid
+    unique: false
     uid: 1001
 
     user_files:
-      enabled: True
+      enabled: true
       # 'source' allows you to define an arbitrary directory to sync, useful to use for default files.
       # should be a salt fileserver path either with or without 'salt://'
       # if not present, it defaults to 'salt://users/files/user/<username>
@@ -185,9 +188,9 @@ users:
 
   ## Absent user
   cuser:
-    absent: True
-    purge: True
-    force: True
+    absent: true
+    purge: true
+    force: true
 
 
 ## Old syntax of absent_users still supported
