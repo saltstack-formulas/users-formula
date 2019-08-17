@@ -22,7 +22,8 @@ groups:
   ssl-cert:
     system: true
     members:
-      # *TODO*: run groups after all users created and then use `auser` and `buser` instead
+      # *TODO*: run groups after all users created and then use `auser` and
+      # `buser` instead
       - root
       - sshd
       # - bin
@@ -172,16 +173,18 @@ users:
 
     user_files:
       enabled: true
-      # 'source' allows you to define an arbitrary directory to sync, useful to use for default files.
+      # 'source' allows you to define an arbitrary directory to sync,
+      # useful to use for default files.
       # should be a salt fileserver path either with or without 'salt://'
       # if not present, it defaults to 'salt://users/files/user/<username>
       source: users/files
       # template: jinja
-      # You can specify octal mode for files and symlinks that will be copied. Since version 2016.11.0
-      # it's possible to use 'keep' for file_mode, to preserve file original mode, thus you can save
-      # execution bit for example.
+      # You can specify octal mode for files and symlinks that will be copied.
+      # Since version 2016.11.0 it's possible to use 'keep' for file_mode,
+      # to preserve file original mode, thus you can save execution bit for example.
       file_mode: keep
-      # You can specify octal mode for directories as well. This won't work on Windows minions
+      # You can specify octal mode for directories as well.
+      # This won't work on Windows minions
       # dir_mode: 775
       sym_mode: 640
       exclude_pat: "*.gitignore"
