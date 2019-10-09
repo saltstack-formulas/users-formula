@@ -10,7 +10,7 @@ users_sudo-package:
   pkg.installed:
     - name: {{ users.sudo_package }}
     - require:
-      - file: {{ users.sudoers_dir }} 
+      - file: {{ users.sudoers_dir }}
     - unless: test "`uname`" = "Darwin"
 
 users_{{ users.sudoers_dir }}:
@@ -19,7 +19,7 @@ users_{{ users.sudoers_dir }}:
 
 users_sudoer-defaults:
     file.append:
-        - name: {{ users.sudoers_file }} 
+        - name: {{ users.sudoers_file }}
         - require:
           - pkg: users_sudo-package
         - text:
