@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 control 'users configuration' do
   title 'should match desired lines'
 
