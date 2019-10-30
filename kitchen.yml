@@ -180,6 +180,10 @@ provisioner:
   salt_install: none
   require_chef: false
   formula: users
+  dependencies:
+  - name: vim
+    repo: git
+    source: https://github.com/saltstack-formulas/vim-formula.git
   salt_copy_filter:
     - .kitchen
     - .git
@@ -198,12 +202,23 @@ suites:
       state_top:
         base:
           '*':
+            - vim
             - users
+            - users.vimrc
       pillars:
         top.sls:
           base:
             '*':
+              - vim
               - users
+        vim.sls:
+          vim:
+            managed_vimrc: true
+            allow_localrc: false
+            config:
+              syntax: 'on'
+              colors: desert
+
       pillars_from_files:
         users.sls: test/salt/pillar/default.sls
     verifier:
