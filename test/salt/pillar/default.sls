@@ -33,6 +33,7 @@ users:
   ## Minimal required pillar values
   auser:
     fullname: A User
+    manage_vimrc: true
 
   ## Full list of pillar values
   buser:
