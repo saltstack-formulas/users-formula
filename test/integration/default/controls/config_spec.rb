@@ -10,3 +10,13 @@ control 'users configuration' do
     its('mode') { should cmp '0750' }
   end
 end
+
+control 'vim formula works' do
+  title 'formula should createfile'
+
+  describe file('/home/auser/.vimrc') do
+    it { should be_owned_by 'auser' }
+    its('mode') { should cmp '0644' }
+    its('content') { should match /syntax on/ }
+  end
+end
