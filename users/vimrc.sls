@@ -1,6 +1,6 @@
 {% from "users/map.jinja" import users with context %}
 
-{% if users.use_vim_formula %}
+{% if salt['pillar.get']('users-formula:use_vim_formula', False) %}
 
 include:
   - users
