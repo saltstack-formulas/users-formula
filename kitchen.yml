@@ -190,3 +190,26 @@ suites:
     verifier:
       inspec_tests:
         - path: test/integration/default
+  - name: vimrc
+    provisioner:
+      state_top:
+        base:
+          '*':
+            - users.vimrc
+      pillars:
+        top.sls:
+          base:
+            '*':
+              - users
+              - vimrc
+      pillars_from_files:
+        users.sls: test/salt/pillar/default.sls
+        vimrc.sls: test/salt/pillar/vimrc.sls
+      dependencies:
+        - name: vim
+          repo: git
+          source: https://github.com/saltstack-formulas/vim-formula.git
+    verifier:
+      inspec_tests:
+        - path: test/integration/default
+        - path: test/integration/vimrc
