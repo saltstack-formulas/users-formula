@@ -2,6 +2,37 @@
 Changelog
 =========
 
+`0.48.3 <https://github.com/saltstack-formulas/users-formula/compare/v0.48.2...v0.48.3>`_ (2019-11-02)
+----------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **pillars:** ensure ``addusers`` & ``delusers`` are lists (\ `b31c592 <https://github.com/saltstack-formulas/users-formula/commit/b31c592147a4831f3800b80fa6d11025c5372f4c>`_\ )
+* **release.config.js:** use full commit hash in commit link [skip ci] (\ `8df4d39 <https://github.com/saltstack-formulas/users-formula/commit/8df4d39060dfaa1d3e8bce4d2cc7afd9c15d7dfd>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **kitchen:** use ``debian-10-master-py3`` instead of ``develop`` [skip ci] (\ `9ee7636 <https://github.com/saltstack-formulas/users-formula/commit/9ee7636477e20ad6597da2dd41375e858f644e4d>`_\ )
+* **kitchen+travis:** upgrade matrix after ``2019.2.2`` release [skip ci] (\ `1d9a5ef <https://github.com/saltstack-formulas/users-formula/commit/1d9a5ef5be4bf0c66d6471effa32a2953637b031>`_\ )
+* **travis:** update ``salt-lint`` config for ``v0.0.10`` [skip ci] (\ `60ee61d <https://github.com/saltstack-formulas/users-formula/commit/60ee61dd66bb3ab53b5dabb8c252e8725b1f0b04>`_\ )
+
+Documentation
+^^^^^^^^^^^^^
+
+
+* **contributing:** remove to use org-level file instead [skip ci] (\ `7c55ef0 <https://github.com/saltstack-formulas/users-formula/commit/7c55ef0c0dba8fbdb34b3882d2b1f8d78c93720d>`_\ )
+* **readme:** update link to ``CONTRIBUTING`` [skip ci] (\ `2a88765 <https://github.com/saltstack-formulas/users-formula/commit/2a887654fcffb2ea6870967007f6d8cd096ed1a0>`_\ )
+
+Performance Improvements
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **travis:** improve ``salt-lint`` invocation [skip ci] (\ `b45914e <https://github.com/saltstack-formulas/users-formula/commit/b45914e063e3ac7462b31efa0b187d13cb8ee81a>`_\ )
+
 `0.48.2 <https://github.com/saltstack-formulas/users-formula/compare/v0.48.1...v0.48.2>`_ (2019-10-11)
 ----------------------------------------------------------------------------------------------------------
 
