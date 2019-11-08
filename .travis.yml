@@ -50,7 +50,8 @@ jobs:
     ## Define the rest of the matrix based on Kitchen testing
     # Make sure the instances listed below match up with
     # the `platforms` defined in `kitchen.yml`
-    - env: INSTANCE=default-debian-10-master-py3
+    # - env: INSTANCE=default-debian-10-master-py3
+    - env: INSTANCE=vimrc-debian-10-master-py3
     # - env: INSTANCE=default-ubuntu-1804-master-py3
     # - env: INSTANCE=default-centos-8-master-py3
     # - env: INSTANCE=default-fedora-31-master-py3

@@ -2,7 +2,6 @@
 # vim: ft=yaml
 ---
 users-formula:
-  use_vim_formula: true
   lookup:  # override the defauls in map.jinja
     root_group: root
 
