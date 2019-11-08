@@ -2,6 +2,29 @@
 Changelog
 =========
 
+`0.48.4 <https://github.com/saltstack-formulas/users-formula/compare/v0.48.3...v0.48.4>`_ (2019-11-08)
+----------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **vimrc:** ensure ``vimrc`` state runs (\ `a1ef7e5 <https://github.com/saltstack-formulas/users-formula/commit/a1ef7e57d9627f59000962111478d0846ab25d5c>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **kitchen:** use ``develop`` image until ``master`` is ready (\ ``amazonlinux``\ ) [skip ci] (\ `852dff2 <https://github.com/saltstack-formulas/users-formula/commit/852dff2aac5216e5ebf3f03cfa8f2559a35bdf9c>`_\ )
+* **kitchen+travis+inspec:** add ``vimrc`` suite (\ `a263a62 <https://github.com/saltstack-formulas/users-formula/commit/a263a62e7570d32d4a796538fc1720e20fa008a1>`_\ )
+
+Tests
+^^^^^
+
+
+* **inspec:** add test to check ``.vimrc`` file is generated properly (\ `569e927 <https://github.com/saltstack-formulas/users-formula/commit/569e9276dbeea38f4920596502db75d64abbdc5e>`_\ )
+* **pillar:** add test pillar to generate ``.vimrc`` file (\ `86144be <https://github.com/saltstack-formulas/users-formula/commit/86144befb9f98597464d9a10d45d820077a171e4>`_\ )
+
 `0.48.3 <https://github.com/saltstack-formulas/users-formula/compare/v0.48.2...v0.48.3>`_ (2019-11-02)
 ----------------------------------------------------------------------------------------------------------
 
