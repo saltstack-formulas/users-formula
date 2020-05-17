@@ -275,12 +275,12 @@ users_authorized_keys_{{ name }}:
     - mode: 600
 {% if 'ssh_auth_file' in user %}
     - contents: |
-        {% for auth in user.ssh_auth_file -%}
+        {% for auth in user.ssh_auth_file | sort -%}
         {{ auth }}
         {% endfor -%}
 {% else %}
     - contents: |
-        {%- for key_name, pillar_name in user['ssh_auth_pillar'].items() %}
+        {%- for key_name, pillar_name in user['ssh_auth_pillar'].items() | sort %}
         {{ salt['pillar.get'](pillar_name + ':' + key_name + ':pubkey', '') }}
         {%- endfor %}
 {% endif %}
@@ -381,10 +381,10 @@ users_ssh_config_{{ name }}:
     - contents: |
         # Managed by Saltstack
         # Do Not Edit
-        {% for label, setting in user.ssh_config.items() %}
+        {% for label, setting in user.ssh_config.items() | sort %}
         # {{ label }}
         Host {{ setting.get('hostname') }}
-          {%- for opts in setting.get('options') %}
+          {%- for opts in setting.get('options') | sort %}
           {{ opts }}
           {%- endfor %}
         {% endfor -%}
@@ -478,7 +478,7 @@ users_{{ users.sudoers_dir }}/{{ name }}:
     - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
     - contents: |
       {%- if 'sudo_defaults' in user %}
-      {%- for entry in user['sudo_defaults'] %}
+      {%- for entry in user['sudo_defaults'] | sort %}
         Defaults:{{ name }} {{ entry }}
       {%- endfor %}
       {%- endif %}
@@ -488,7 +488,7 @@ users_{{ users.sudoers_dir }}/{{ name }}:
         # Your changes will be overwritten.
         ########################################################################
         #
-      {%- for rule in user['sudo_rules'] %}
+      {%- for rule in user['sudo_rules'] | sort %}
         {{ name }} {{ rule }}
       {%- endfor %}
       {%- endif %}
