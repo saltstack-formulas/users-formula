@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.48.5](https://github.com/saltstack-formulas/users-formula/compare/v0.48.4...v0.48.5) (2020-07-25)
+
+
+### Bug Fixes
+
+* **macos:** gid must be numeric on macos ([9517e4b](https://github.com/saltstack-formulas/users-formula/commit/9517e4b069d130b442562ed28fa9641cfebeb698))
+
+
+### Continuous Integration
+
+* **gemfile:** restrict `train` gem version until upstream fix [skip ci] ([40f8e2d](https://github.com/saltstack-formulas/users-formula/commit/40f8e2d181f6ab345d205da95013bab8370afaf0))
+* **gemfile.lock:** add to repo with updated `Gemfile` [skip ci] ([ad7e8f7](https://github.com/saltstack-formulas/users-formula/commit/ad7e8f7cab43fb01b8a3a6651e1adf96241e63cf))
+* **kitchen:** avoid using bootstrap for `master` instances [skip ci] ([4441c59](https://github.com/saltstack-formulas/users-formula/commit/4441c597bd6425b5e5d79ced23d2c43790ec184e))
+* **kitchen:** use `saltimages` Docker Hub where available [skip ci] ([c12272e](https://github.com/saltstack-formulas/users-formula/commit/c12272eaae0440808f8c00ac5ac2f66ea5174f17))
+* **kitchen+travis:** remove `master-py2-arch-base-latest` [skip ci] ([892868f](https://github.com/saltstack-formulas/users-formula/commit/892868f3b52dfb1f3aaa2760bf37635b94eb2d29))
+* **travis:** add notifications => zulip [skip ci] ([628a430](https://github.com/saltstack-formulas/users-formula/commit/628a4306814bb69af750f35c7fa077662033a19b))
+* **travis:** apply changes from build config validation [skip ci] ([9f76672](https://github.com/saltstack-formulas/users-formula/commit/9f766728d4f8c44ed791dcc28e049c890331746d))
+* **travis:** opt-in to `dpl v2` to complete build config validation [skip ci] ([9a983a4](https://github.com/saltstack-formulas/users-formula/commit/9a983a4c2aee5e097f16378885ab7d6cad490509))
+* **travis:** quote pathspecs used with `git ls-files` [skip ci] ([f9f8f13](https://github.com/saltstack-formulas/users-formula/commit/f9f8f13693307695d6b6d8ca0aa2a9dcaa82c0c0))
+* **travis:** run `shellcheck` during lint job [skip ci] ([e09c822](https://github.com/saltstack-formulas/users-formula/commit/e09c8221657338baabf73c97902174513009f63b))
+* **travis:** use `major.minor` for `semantic-release` version [skip ci] ([0afebc6](https://github.com/saltstack-formulas/users-formula/commit/0afebc6fc36e1df818640bdddf6136841611243e))
+* **travis:** use build config validation (beta) [skip ci] ([0ddb90e](https://github.com/saltstack-formulas/users-formula/commit/0ddb90e6b546215e4de07b8257a89fc874f80d8b))
+* **workflows/commitlint:** add to repo [skip ci] ([7419dda](https://github.com/saltstack-formulas/users-formula/commit/7419dda3a4791044b8dd637cfcb8daedc637a2a8))
+
 ## [0.48.4](https://github.com/saltstack-formulas/users-formula/compare/v0.48.3...v0.48.4) (2019-11-08)
 
 
