@@ -143,7 +143,7 @@ users_{{ name }}_user:
     - gid: {{ user['prime_group']['gid'] }}
     {% elif 'prime_group' in user and 'name' in user['prime_group'] %}
     - gid: {{ user['prime_group']['name'] }}
-    {% else -%}
+    {% elif grains.os != 'MacOS' -%}
     - gid: {{ name }}
     {% endif -%}
     {% if 'fullname' in user %}
