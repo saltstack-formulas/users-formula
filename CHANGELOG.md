@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.48.6](https://github.com/saltstack-formulas/users-formula/compare/v0.48.5...v0.48.6) (2020-10-02)
+
+
+### Styles
+
+* quote numbers and file modes ([db30289](https://github.com/saltstack-formulas/users-formula/commit/db302890460c6ac079bacb34a5c4f0b304fffe69))
+
 ## [0.48.5](https://github.com/saltstack-formulas/users-formula/compare/v0.48.4...v0.48.5) (2020-07-25)
 
 
