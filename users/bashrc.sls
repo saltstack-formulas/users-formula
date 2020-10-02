@@ -20,7 +20,7 @@ users_{{ name }}_user_bashrc:
     - name: {{ home }}/.bashrc
     - user: {{ name }}
     - group: {{ user_group }}
-    - mode: 644
+    - mode: '0644'
     - template: jinja
     - source:
       - salt://users/files/bashrc/{{ name }}/bashrc
