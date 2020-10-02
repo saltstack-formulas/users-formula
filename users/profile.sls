@@ -20,7 +20,7 @@ users_{{ name }}_user_profile:
     - name: {{ home }}/.profile
     - user: {{ name }}
     - group: {{ user_group }}
-    - mode: 644
+    - mode: '0644'
     - template: jinja
     - source:
       - salt://users/files/profile/{{ name }}/profile

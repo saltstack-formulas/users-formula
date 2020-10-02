@@ -13,7 +13,7 @@ users_{{ users.googleauth_dir }}:
     - name: {{ users.googleauth_dir }}
     - user: root
     - group: {{ users.root_group }}
-    - mode: 600
+    - mode: '0600'
 
 {%-   for name, user in pillar.get('users', {}).items() if user.absent is not defined or not user.absent %}
 {%-     if 'google_auth' in user %}
