@@ -5,6 +5,7 @@
 {% set used_user_files = [] %}
 {% set used_polkit = [] %}
 {%- set create_dirs = [] %}
+{%- set created_groups = [] %}
 
 {% for group, setting in salt['pillar.get']('groups', {}).items() %}
 {%   if setting.absent is defined and setting.absent or setting.get('state', "present") == 'absent' %}
@@ -12,6 +13,7 @@ users_group_absent_{{ group }}:
   group.absent:
     - name: {{ group }}
 {% else %}
+{%- do created_groups.append(group) %}
 users_group_present_{{ group }}:
   group.present:
     - name: {{ group }}
@@ -82,8 +84,27 @@ include:
 {%- endif %}
 
 {%- if not ( 'sudoonly' in user and user['sudoonly'] ) %}
-{% for group in user.get('groups', []) %}
-users_{{ name }}_{{ group }}_group:
+
+{#- create prime group #}
+{%- if user_group not in created_groups %}
+{%- do created_groups.append(user_group) %}
+users_group_present_{{ user_group }}:
+  group.present:
+    - name: {{ user_group }}
+    {%- if 'prime_group' in user and 'gid' in user['prime_group'] %}
+    - gid: {{ user['prime_group']['gid'] }}
+    {%- elif 'uid' in user %}
+    - gid: {{ user['uid'] }}
+    {%- endif %}
+    {% if 'system' in user and user['system'] %}
+    - system: True
+    {% endif %}
+{%- endif %}
+
+{#- create required groups #}
+{%- for group in user.get('groups', []) if group not in created_groups %}
+{%- do created_groups.append(group) %}
+users_group_present_{{ group }}:
   group.present:
     - name: {{ group }}
     {% if group == 'sudo' %}
@@ -103,16 +124,6 @@ users_{{ name }}_user:
       - user: users_{{ name }}_user
       - group: {{ user_group }}
   {%- endif %}
-  group.present:
-    - name: {{ user_group }}
-    {%- if 'prime_group' in user and 'gid' in user['prime_group'] %}
-    - gid: {{ user['prime_group']['gid'] }}
-    {%- elif 'uid' in user %}
-    - gid: {{ user['uid'] }}
-    {%- endif %}
-    {% if 'system' in user and user['system'] %}
-    - system: True
-    {% endif %}
   user.present:
     - name: {{ name }}
     - home: {{ home }}
