@@ -4,6 +4,7 @@
 {% set used_googleauth = [] %}
 {% set used_user_files = [] %}
 {% set used_polkit = [] %}
+{%- set create_dirs = [] %}
 
 {% for group, setting in salt['pillar.get']('groups', {}).items() %}
 {%   if setting.absent is defined and setting.absent or setting.get('state', "present") == 'absent' %}
@@ -75,6 +76,11 @@ include:
 {%- set user_group = name -%}
 {%- endif %}
 
+{%- if createhome %}
+{%- set required_dir = salt['file.dirname'](home) %}
+{%- do create_dirs.append(required_dir) %}
+{%- endif %}
+
 {%- if not ( 'sudoonly' in user and user['sudoonly'] ) %}
 {% for group in user.get('groups', []) %}
 users_{{ name }}_{{ group }}_group:
@@ -84,16 +90,6 @@ users_{{ name }}_{{ group }}_group:
     - system: True
     {% endif %}
 {% endfor %}
-
-{# in case home subfolder doesn't exist, create it before the user exists #}
-{% if createhome -%}
-users_{{ name }}_user_prereq:
-  file.directory:
-    - name: {{ salt['file.dirname'](home) }}
-    - makedirs: True
-    - prereq:
-      - user: users_{{ name }}_user
-{%- endif %}
 
 users_{{ name }}_user:
   {% if createhome -%}
@@ -207,6 +203,9 @@ users_{{ name }}_user:
       {% for group in user.get('groups', []) -%}
       - group: {{ group }}
       {% endfor %}
+      {%- if createhome and required_dir != '/' %}
+      - file: users_prereq_dir_{{ required_dir }}
+      {%- endif %}
 
 
   {% if 'ssh_keys' in user or
@@ -567,6 +566,14 @@ users_{{ name }}_user_gitconfig_absent_{{ key }}:
 {% endif %}
 
 {% endfor %}
+
+{#- create directories for homes #}
+{%- for dir in create_dirs|unique|reject('equalto', '/') %}
+users_prereq_dir_{{ dir }}:
+  file.directory:
+    - name: {{ dir }}
+    - makedirs: True
+{%- endfor %}
 
 
 {% for name, user in pillar.get('users', {}).items()
