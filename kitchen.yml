@@ -312,6 +312,7 @@ suites:
       state_top:
         base:
           '*':
+            - users._mapdata
             - users
       pillars:
         top.sls:
@@ -332,6 +333,7 @@ suites:
       state_top:
         base:
           '*':
+            - users._mapdata
             - users.vimrc
       pillars:
         top.sls:
