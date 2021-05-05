@@ -1,7 +1,5 @@
-.. _readme:
-
-users
-=====
+users-formula
+=============
 
 |img_travis| |img_sr|
 
@@ -64,7 +62,7 @@ Ensures the bashrc file exists in the users home directory. Sets 'manage_bashrc:
 True' in pillar per user. Defaults to False.
 
 ``users.profile``
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 Ensures the profile file exists in the users home directory. Sets 'manage_profile:
 True' in pillar per user. Defaults to False.
