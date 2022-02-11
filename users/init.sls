@@ -495,9 +495,9 @@ users_{{ users.sudoers_dir }}/{{ name }}:
     - require:
       - file: users_sudoer-defaults
       - file: users_sudoer-{{ name }}
-  cmd.wait:
+  cmd.run:
     - name: visudo -cf {{ users.sudoers_dir }}/{{ sudoers_d_filename }} || ( rm -rvf {{ users.sudoers_dir }}/{{ sudoers_d_filename }}; exit 1 )
-    - watch:
+    - onchanges:
       - file: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 {% else %}
