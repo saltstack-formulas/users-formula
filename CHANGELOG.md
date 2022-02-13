@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.48.7](https://github.com/saltstack-formulas/users-formula/compare/v0.48.6...v0.48.7) (2022-02-13)
+
+
+### Code Refactoring
+
+* **salt-lint:** fix violation ([696139a](https://github.com/saltstack-formulas/users-formula/commit/696139a841b4984e0a20965c6156752d9de79941))
+
+
+### Continuous Integration
+
+* update linters to latest versions [skip ci] ([a4fb2c6](https://github.com/saltstack-formulas/users-formula/commit/a4fb2c638070a36d9cd7b48406a00e2bfd1611e7))
+* **3003.1:** update inc. AlmaLinux, Rocky & `rst-lint` [skip ci] ([ec9506d](https://github.com/saltstack-formulas/users-formula/commit/ec9506da14f4bfb089b90b87fb3144d07fa6f2e7))
+* **commitlint:** ensure `upstream/master` uses main repo URL [skip ci] ([2f0db66](https://github.com/saltstack-formulas/users-formula/commit/2f0db666e49838ab58dd644a0f76201f8a24b2e8))
+* **gemfile:** allow rubygems proxy to be provided as an env var [skip ci] ([47cfe0e](https://github.com/saltstack-formulas/users-formula/commit/47cfe0ecd7ff697562da5a37e046ce1d18a105b6))
+* **gemfile+lock:** use `ssf` customised `inspec` repo [skip ci] ([6ad3c6a](https://github.com/saltstack-formulas/users-formula/commit/6ad3c6a1482a24b24bef33aab14808003852e560))
+* **gemfile+lock:** use `ssf` customised `kitchen-docker` repo [skip ci] ([8698fa5](https://github.com/saltstack-formulas/users-formula/commit/8698fa535f294d1165549fc41998e2a124e78cc8))
+* **gitlab-ci:** add `rubocop` linter (with `allow_failure`) [skip ci] ([9b8b6e6](https://github.com/saltstack-formulas/users-formula/commit/9b8b6e6a82aa300933ea2d3e0c05fc265fa53195))
+* **gitlab-ci:** use GitLab CI as Travis CI replacement ([3c879df](https://github.com/saltstack-formulas/users-formula/commit/3c879df9535578edbca4a6592571ccd16aff6148))
+* **kitchen:** move `provisioner` block & update `run_command` [skip ci] ([72c64ad](https://github.com/saltstack-formulas/users-formula/commit/72c64adbea8f2e31c3b6d6bb54b5f6f9e6e9437d))
+* **kitchen+ci:** update with `3004` pre-salted images/boxes [skip ci] ([4a8452a](https://github.com/saltstack-formulas/users-formula/commit/4a8452a266300d5c40429b7c1a4276c96afb1519))
+* **kitchen+ci:** update with latest `3003.2` pre-salted images [skip ci] ([6de2acb](https://github.com/saltstack-formulas/users-formula/commit/6de2acbe93aba57bdfb5be6c45049796f1f0e3a9))
+* **kitchen+ci:** update with latest CVE pre-salted images [skip ci] ([22c21e4](https://github.com/saltstack-formulas/users-formula/commit/22c21e490e7f693c9a12c4d2b996f263c9ebe5c0))
+* **kitchen+ci:** use latest pre-salted images (after CVE) [skip ci] ([dabc4b7](https://github.com/saltstack-formulas/users-formula/commit/dabc4b742ada383a7e5f6c4f376381380106e6d2))
+* **kitchen+gitlab:** adjust matrix to add `3003` [skip ci] ([34c757a](https://github.com/saltstack-formulas/users-formula/commit/34c757a9bb9967530168a3f4892c7c8c8d5b79ba))
+* **kitchen+gitlab:** remove Ubuntu 16.04 & Fedora 32 (EOL) [skip ci] ([3935693](https://github.com/saltstack-formulas/users-formula/commit/3935693b589ead4b4a479a10c5a0216ab5b39f7f))
+* **kitchen+gitlab:** update for new pre-salted images [skip ci] ([0bff9fb](https://github.com/saltstack-formulas/users-formula/commit/0bff9fba4cf56154e5e5247639da90870d837c0a))
+* add `arch-master` to matrix and update `.travis.yml` [skip ci] ([632dc3c](https://github.com/saltstack-formulas/users-formula/commit/632dc3cc4b0d957bdb6bc51b942e37688163cb5e))
+* add Debian 11 Bullseye & update `yamllint` configuration [skip ci] ([0c49302](https://github.com/saltstack-formulas/users-formula/commit/0c493020eef811bc95beea9674ecdbc229a1e7a8))
+* **kitchen+gitlab-ci:** use latest pre-salted images [skip ci] ([c260fe7](https://github.com/saltstack-formulas/users-formula/commit/c260fe712669632c3f25c3cd1d778d70f9c7f88a))
+* **pre-commit:** add to formula [skip ci] ([d0e7c0a](https://github.com/saltstack-formulas/users-formula/commit/d0e7c0a19e940fecefd0df5c2061cf50d733da73))
+* **pre-commit:** enable/disable `rstcheck` as relevant [skip ci] ([013b2cd](https://github.com/saltstack-formulas/users-formula/commit/013b2cd3b84b80b32fae966d10b92f9da979ecf0))
+* **pre-commit:** finalise `rstcheck` configuration [skip ci] ([89c3c8f](https://github.com/saltstack-formulas/users-formula/commit/89c3c8f80606fd9266267c35a34e907b214ebca3))
+* **pre-commit:** update hook for `rubocop` [skip ci] ([0e7c6a3](https://github.com/saltstack-formulas/users-formula/commit/0e7c6a38969aea06d1b2c9e9c0135e71717dca5c))
+
+
+### Documentation
+
+* **readme:** fix headings [skip ci] ([7d06cd5](https://github.com/saltstack-formulas/users-formula/commit/7d06cd56dd2ed355f5117a88d91749a0639dca64))
+
+
+### Tests
+
+* standardise use of `share` suite & `_mapdata` state [skip ci] ([2a7c0de](https://github.com/saltstack-formulas/users-formula/commit/2a7c0de4aaf287a56ff96cabd900531740f097f5))
+
 ## [0.48.6](https://github.com/saltstack-formulas/users-formula/compare/v0.48.5...v0.48.6) (2020-10-02)
 
 
