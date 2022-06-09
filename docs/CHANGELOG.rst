@@ -2,6 +2,29 @@
 Changelog
 =========
 
+`0.48.8 <https://github.com/saltstack-formulas/users-formula/compare/v0.48.7...v0.48.8>`_ (2022-06-09)
+----------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **googleauth:** ensure newline is preserved in ``repl`` of ``file.replace`` (\ `1dd5f32 <https://github.com/saltstack-formulas/users-formula/commit/1dd5f32a52b2e20b1fd58b23b260217b0144ad63>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* update ``pre-commit`` configuration inc. for pre-commit.ci [skip ci] (\ `8dce714 <https://github.com/saltstack-formulas/users-formula/commit/8dce714dcd6205bebf903be01acf2d99a892c9d8>`_\ )
+* **kitchen+gitlab:** update for new pre-salted images [skip ci] (\ `6ebb05a <https://github.com/saltstack-formulas/users-formula/commit/6ebb05a00289a3f27de3f24995610e7659f450f3>`_\ )
+
+Tests
+^^^^^
+
+
+* **system:** add ``build_platform_codename`` [skip ci] (\ `95cefb3 <https://github.com/saltstack-formulas/users-formula/commit/95cefb36ab62ea2bca792cf4080f69b4cef2697c>`_\ )
+* **system.rb:** add support for ``mac_os_x`` [skip ci] (\ `321fdcf <https://github.com/saltstack-formulas/users-formula/commit/321fdcfd975faae3ae08b3df3d5d0a6bd6d39e6b>`_\ )
+
 `0.48.7 <https://github.com/saltstack-formulas/users-formula/compare/v0.48.6...v0.48.7>`_ (2022-02-13)
 ----------------------------------------------------------------------------------------------------------
 
