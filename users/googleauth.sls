@@ -19,7 +19,7 @@ users_{{ users.googleauth_dir }}:
 {%-     if 'google_auth' in user %}
 {%-       for svc in user['google_auth'] %}
 {%-         if user.get('google_2fa', True) %}
-{%-           set repl = '{0}       {1}   {2} {3} {4}{5}/{6}_{7} {8}\n{9}'.format(
+{%-           set repl = '{0}       {1}   {2} {3} {4}{5}/{6}_{7} {8}\\n{9}'.format(
                              'auth',
                              '[success=done new_authtok_reqd=done default=die]',
                              'pam_google_authenticator.so',
