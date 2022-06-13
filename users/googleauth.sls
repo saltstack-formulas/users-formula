@@ -19,7 +19,7 @@ users_{{ users.googleauth_dir }}:
 {%-     if 'google_auth' in user %}
 {%-       for svc in user['google_auth'] %}
 {%-         if user.get('google_2fa', True) %}
-{%-           set repl = '{0}       {1}   {2} {3} {4}{5}/{6}_{7} {8}\\n{9}'.format(
+{%-           set repl = '{0}       {1}   {2} {3} {4}{5}/{6}_{7} {8}'.format(
                              'auth',
                              '[success=done new_authtok_reqd=done default=die]',
                              'pam_google_authenticator.so',
@@ -29,13 +29,12 @@ users_{{ users.googleauth_dir }}:
                              '${USER}',
                              svc,
                              'echo_verification_code',
-                             '@include common-auth',
                          ) %}
 users_googleauth-pam-{{ svc }}-{{ name }}:
   file.replace:
     - name: /etc/pam.d/{{ svc }}
-    - pattern: "^@include common-auth"
-    - repl: "{{ repl }}"
+    - pattern: '^(@include[ \t]*common-auth)'
+    - repl: '{{ repl }}\n\1'
     - unless: grep pam_google_authenticator.so /etc/pam.d/{{ svc }}
     - backup: .bak
 {%-         endif %}
