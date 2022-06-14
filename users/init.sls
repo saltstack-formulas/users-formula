@@ -50,6 +50,9 @@ include:
   - users.sudo
 {%- endif %}
 {%- if used_googleauth %}
+{%- if grains['os_family'] == 'RedHat' %}
+  - epel
+{%- endif %}
   - users.googleauth
 {%- endif %}
 {%- if used_user_files %}
@@ -506,7 +509,7 @@ users_{{ users.sudoers_dir }}/{{ sudoers_d_filename }}:
     - name: {{ users.sudoers_dir }}/{{ sudoers_d_filename }}
 {% endif %}
 
-{%- if not grains['os_family'] in ['RedHat', 'Suse'] %}
+{%- if not grains['os_family'] in ['Suse'] %}
 {%-   if 'google_auth' in user %}
 {%-     for svc in user['google_auth'] %}
 users_googleauth-{{ svc }}-{{ name }}:
@@ -518,6 +521,9 @@ users_googleauth-{{ svc }}-{{ name }}:
     - group: {{ users.root_group }}
     - mode: '0600'
     - require:
+{%-       if grains['os_family'] == 'RedHat' %}
+      - pkg: epel_release
+{%-       endif %}
       - pkg: users_googleauth-package
 {%-     endfor %}
 {%-   endif %}
