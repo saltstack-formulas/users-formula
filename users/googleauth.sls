@@ -2,6 +2,20 @@
 {%- from "users/map.jinja" import users with context %}
 
 {%- if not grains['os_family'] in ['Suse'] %}
+{%-   if salt['grains.get']('osfinger', '') in ['Amazon Linux-2'] %}
+users_epel_repo:
+  pkgrepo.managed:
+    - name: epel
+    - humanname: Extra Packages for Enterprise Linux 7 - $basearch
+    - mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
+    - enabled: 1
+    - gpgcheck: 1
+    - gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+    - failovermethod: priority
+    - require_in:
+      - pkg: users_googleauth-package
+{%-   endif %}
+
 users_googleauth-package:
   pkg.installed:
     - name: {{ users.googleauth_package }}

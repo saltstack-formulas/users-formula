@@ -50,9 +50,6 @@ include:
   - users.sudo
 {%- endif %}
 {%- if used_googleauth %}
-{%- if grains['os_family'] == 'RedHat' %}
-  - epel
-{%- endif %}
   - users.googleauth
 {%- endif %}
 {%- if used_user_files %}
@@ -521,9 +518,6 @@ users_googleauth-{{ svc }}-{{ name }}:
     - group: {{ users.root_group }}
     - mode: '0600'
     - require:
-{%-       if grains['os_family'] == 'RedHat' %}
-      - pkg: epel_release
-{%-       endif %}
       - pkg: users_googleauth-package
 {%-     endfor %}
 {%-   endif %}
