@@ -15,7 +15,7 @@ users_{{ users.googleauth_dir }}:
     - group: {{ users.root_group }}
     - mode: '0700'
 
-{%-   if grains['os_family'] == 'RedHat' %}
+{%-   if grains['os_family'] == 'RedHat' and "selinux" in grains and grains.selinux.enabled %}
 policycoreutils-package:
   pkg.installed:
     - pkgs:
@@ -67,7 +67,7 @@ users_googleauth-pam-{{ svc }}-{{ name }}:
 {%-     endif %}
 {%-   endfor %}
 
-{%-   if grains['os_family'] == 'RedHat' %}
+{%-   if grains['os_family'] == 'RedHat' and "selinux" in grains and grains.selinux.enabled %}
 users_googleauth_selinux_applied:
   selinux.fcontext_policy_applied:
     - name: {{ users.googleauth_dir }}
