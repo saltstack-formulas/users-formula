@@ -73,4 +73,15 @@ users_googleauth_selinux_applied:
     - name: {{ users.googleauth_dir }}
 {%-   endif %}
 
+sshd:
+  service.running:
+    - watch:
+      - file: /etc/ssh/sshd_config
+
+sshd_config:
+  file.replace:
+    - name: /etc/ssh/sshd_config
+    - pattern: '^(ChallengeResponseAuthentication|KbdInteractiveAuthentication).*'
+    - repl: '\1 yes'
+
 {%- endif %}
