@@ -30,6 +30,19 @@
     'polkit_dir': '/etc/polkit-1/localauthority.conf.d',
     'polkit_defaults': 'unix-group:sudo;'
   },
+  'RedHat': {
+    'sudoers_dir': '/etc/sudoers.d',
+    'sudoers_file': '/etc/sudoers',
+    'googleauth_dir': '/etc/google_authenticator.d',
+    'root_group': 'root',
+    'shell': '/bin/bash',
+    'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
+    'googleauth_package': 'google-authenticator',
+    'polkit_dir': '/etc/polkit-1/localauthority.conf.d',
+    'polkit_defaults': 'unix-group:sudo;'
+  },
   'Gentoo': {
     'sudoers_dir': '/etc/sudoers.d',
     'sudoers_file': '/etc/sudoers',
